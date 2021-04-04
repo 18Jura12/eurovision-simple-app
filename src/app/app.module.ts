@@ -25,7 +25,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    ToastrModule,
+    ToastrModule.forRoot(),
     RxReactiveFormsModule
   ],
   providers: [],
