@@ -1,0 +1,17 @@
+<div class="row">
+  <div
+    class="col-md-10"
+    *ngFor="let song of songs; let i = index;">
+    <div class="btn-group m-2 p-1">
+      <button class="btn btn-outline-secondary">
+        <span [ngClass]="'h3 flag-icon flag-icon-'+ song.countryFlag"></span>
+      </button>
+      <button class="btn btn-outline-info">
+        <span class="h4"> jučo: {{song.points.juco < 10 ? ('0' + song.points.juco) : song.points.juco}}  |  tečo: {{song.points.teco < 10 ? ('0' + song.points.teco) : song.points.teco}} </span>
+      </button>
+      <button class="btn btn-outline-info">
+        <span class="h4"> result: {{(+song.points.juco + +song.points.teco < 10) ? ('0' + (+song.points.juco + +song.points.teco)) : (+song.points.juco + +song.points.teco)}} </span>
+      </button>
+    </div>
+  </div>
+</div>

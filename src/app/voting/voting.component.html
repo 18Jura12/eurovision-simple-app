@@ -1,0 +1,33 @@
+<div class="container card p-3">
+  <div class="flex-row justify-content-between">
+    <div class="col-md-12">
+      <form
+        [formGroup]="voteForm"
+        (ngSubmit)="onSubmit()">
+        <div formArrayName="votes" class="container d-wrap">
+          <div
+            *ngFor="let songForm of songControls; let i=index"
+            [formGroupName]="i">
+            <div [ngClass]="'input-group w-25 m-1 '">
+              <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary text-dark" disabled>
+                  <span [ngClass]="' flag-icon flag-icon-'+ getSongDetails(i).countryFlag"></span>
+                  <!-- <span class="text-center">{{ getSongDetails(i).countryName }}</span> -->
+                </button>
+              </div>
+              <input
+                type="number"
+                formControlName="vote"
+                class="form-control"
+                min="1"
+                max="26">
+            </div>
+          </div>
+        </div>
+        <button
+          class="btn btn-outline-success m-3"
+          [disabled]="voteForm.invalid">Vote</button>
+      </form>
+    </div>
+  </div>
+</div>
