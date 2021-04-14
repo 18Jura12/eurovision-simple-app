@@ -197,9 +197,9 @@ export class VotingComponent implements OnInit {
         this.initForm();
       }
     );
-    this.dataStorageService.storeContacts().subscribe(
-      // resData => console.log(resData)
-    );
+    // this.dataStorageService.storeContacts().subscribe(
+    //   // resData => console.log(resData)
+    // );
   }
 
   initForm() {
