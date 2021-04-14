@@ -1,33 +1,65 @@
 <div class="container card p-3">
-  <div class="flex-row justify-content-between">
-    <div class="col-md-12">
+  <div class="flex-row justify-content-center">
+    <div class="col-md-12 offset-3">
       <form
         [formGroup]="voteForm"
         (ngSubmit)="onSubmit()">
-        <div formArrayName="votes" class="container d-wrap">
+        <div formArrayName="votes" class="container example-list" cdkDropList (cdkDropListDropped)="drop($event)">
           <div
             *ngFor="let songForm of songControls; let i=index"
-            [formGroupName]="i">
+            [formGroupName]="i"
+            class="example-box"
+            cdkDrag>
             <div [ngClass]="'input-group w-25 m-1 '">
               <div class="input-group-prepend">
                 <button class="btn btn-outline-secondary text-dark" disabled>
                   <span [ngClass]="' flag-icon flag-icon-'+ getSongDetails(i).countryFlag"></span>
-                  <!-- <span class="text-center">{{ getSongDetails(i).countryName }}</span> -->
+                  <!-- <span class="text-center" style="width: 250px;">  {{ getSongDetails(i).countryName }}</span> -->
                 </button>
               </div>
               <input
                 type="number"
                 formControlName="vote"
                 class="form-control"
-                min="1"
-                max="26">
+                readonly>
             </div>
           </div>
         </div>
         <button
           class="btn btn-outline-success m-3"
-          [disabled]="voteForm.invalid">Vote</button>
+          [disabled]="voteForm.invalid">Vote
+        </button>
+        <span
+          *ngIf="isLoading"
+          style="text-align: center;">
+          <app-loading-spinner></app-loading-spinner>
+        </span>
       </form>
+      <!-- <form
+        [formGroup]="votingForm"
+        (ngSubmit)="onSubmit()">
+        <div
+          *ngFor="let songForm of songControls; let i = index"
+          [formGroupName]="i">
+          <button type="button" class="btn btn-outline-secondary text-dark" disabled>
+            <span [ngClass]="' flag-icon flag-icon-'+ getSongDetails(i).countryFlag"></span>
+          </button>
+        </div>
+        <div class="input-group offset-n3">
+          <div class="input-group-prepend">
+            <button
+              class="btn btn-outline-success m-3"
+              [disabled]="votingForm.invalid">Vote
+            </button>
+          </div>
+          <input
+                type="number"
+                formControlName="vote"
+                class="form-control"
+                min="1"
+                max="26">
+        </div>
+      </form> -->
     </div>
   </div>
 </div>

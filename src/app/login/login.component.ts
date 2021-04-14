@@ -8,7 +8,6 @@ import { LoginService } from './login.service';
   styleUrls: ['./login.component.less']
 })
 export class LoginComponent implements OnInit {
-  name: { a: string, b: string } = { a: 'juco', b: 'teco' };
 
   constructor(
     private router: Router,

@@ -1,5 +1,5 @@
 import { Injectable, Output } from "@angular/core";
-import { Subject } from "rxjs/internal/Subject";
+import * as _ from 'lodash';
 
 export class SongDB {
   constructor(
@@ -7,145 +7,182 @@ export class SongDB {
     public countryName: string,
     public points: {
       juco: number,
+      lea: number,
+      matija: number,
+      renato: number,
       teco: number
     }
   ) {}
+
+  getTotal() {
+    return _.sum(_.values(this.points));
+  }
+
+  get votes() {
+    return Object.entries(this.points);
+  }
 }
 
 @Injectable({providedIn: 'root'})
 export class VotingService {
   //@Output() voted = new Subject<string>();
   songs: SongDB[] = [
-    {
-      countryFlag: 'sm',
-      countryName: 'San Marino',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'lt',
-      countryName: 'Lithuania',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'md',
-      countryName: 'Moldova',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'es',
-      countryName: 'Spain',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ru',
-      countryName: 'Russia',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'is',
-      countryName: 'Iceland',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'de',
-      countryName: 'Germany',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'mk',
-      countryName: 'North Macedonia',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ge',
-      countryName: 'Georgia',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'nl',
-      countryName: 'The Netherlands',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'cy',
-      countryName: 'Cyprus',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'al',
-      countryName: 'Albania',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'fr',
-      countryName: 'France',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'hr',
-      countryName: 'Croatia',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'bg',
-      countryName: 'Bulgaria',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'it',
-      countryName: 'Italy',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ie',
-      countryName: 'Republic of Ireland',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'fi',
-      countryName: 'Finland',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'be',
-      countryName: 'Belgium',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'lv',
-      countryName: 'Latvia',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'il',
-      countryName: 'Israel',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ch',
-      countryName: 'Switzerland',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ro',
-      countryName: 'Romania',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'dk',
-      countryName: 'Denmark',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ua',
-      countryName: 'Ukraine',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'gb',
-      countryName: 'United Kingdom',
-      points: { juco: 0, teco: 0 }
-    },
+    new SongDB(
+      'bg' , 'Bulgaria',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'it', 'Italy',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ie', 'Republic of Ireland',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'az', 'Azerbaijan',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ua', 'Ukraine',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ee', 'Estonia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'es', 'Spain',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'cz', 'Czechia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'hu', 'Hungary',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'lv', 'Latvia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'hr', 'Croatia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'fr', 'France',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'cy', 'Cyprus',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'dk', 'Denmark',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'gr', 'Greece',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'is', 'Iceland',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'de', 'Germany',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'lt', 'Lithuania',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'nl', 'The Netherlands',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'il', 'Israel',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'mk', 'North Macedonia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'mt', 'Malta',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'no', 'Norway',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'pl', 'Poland',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'pt', 'Portugal',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ro', 'Romania',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    )
   ];
 
   getSongs() {

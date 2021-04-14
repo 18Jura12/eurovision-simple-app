@@ -1,9 +1,11 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { DataStorageService } from '../shared/data-storage.service';
 import { SongDB, VotingService } from './voting.service';
+import * as _ from 'lodash';
 
 export class Song {
   constructor(
@@ -19,138 +21,165 @@ export class Song {
 })
 export class VotingComponent implements OnInit {
   login: string;
+  isLoading: boolean = false;
   voteForm: FormGroup;
   songs: SongDB[] = [
-    {
-      countryFlag: 'sm',
-      countryName: 'San Marino',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'lt',
-      countryName: 'Lithuania',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'md',
-      countryName: 'Moldova',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'es',
-      countryName: 'Spain',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ru',
-      countryName: 'Russia',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'is',
-      countryName: 'Iceland',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'de',
-      countryName: 'Germany',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'mk',
-      countryName: 'North Macedonia',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ge',
-      countryName: 'Georgia',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'nl',
-      countryName: 'The Netherlands',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'cy',
-      countryName: 'Cyprus',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'al',
-      countryName: 'Albania',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'fr',
-      countryName: 'France',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'hr',
-      countryName: 'Croatia',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'bg',
-      countryName: 'Bulgaria',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'it',
-      countryName: 'Italy',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ie',
-      countryName: 'Republic of Ireland',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'fi',
-      countryName: 'Finland',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'be',
-      countryName: 'Belgium',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'lv',
-      countryName: 'Latvia',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'il',
-      countryName: 'Israel',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ch',
-      countryName: 'Switzerland',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ro',
-      countryName: 'Romania',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'dk',
-      countryName: 'Denmark',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'ua',
-      countryName: 'Ukraine',
-      points: { juco: 0, teco: 0 }
-    },
-    {
-      countryFlag: 'gb',
-      countryName: 'United Kingdom',
-      points: { juco: 0, teco: 0 }
-    },
+    new SongDB(
+      'bg' , 'Bulgaria',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'it', 'Italy',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ie', 'Republic of Ireland',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'az', 'Azerbaijan',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ua', 'Ukraine',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ee', 'Estonia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'es', 'Spain',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'cz', 'Czechia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'hu', 'Hungary',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'lv', 'Latvia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'hr', 'Croatia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'fr', 'France',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'cy', 'Cyprus',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'dk', 'Denmark',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'gr', 'Greece',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'is', 'Iceland',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'de', 'Germany',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'lt', 'Lithuania',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'nl', 'The Netherlands',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'il', 'Israel',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'mk', 'North Macedonia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'mt', 'Malta',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'no', 'Norway',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'pl', 'Poland',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'pt', 'Portugal',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ro', 'Romania',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    )
   ];
 
   constructor(
@@ -168,9 +197,9 @@ export class VotingComponent implements OnInit {
         this.initForm();
       }
     );
-    // this.dataStorageService.storeContacts().subscribe(
-    //   // resData => console.log(resData)
-    // );
+    this.dataStorageService.storeContacts().subscribe(
+      // resData => console.log(resData)
+    );
   }
 
   initForm() {
@@ -181,7 +210,7 @@ export class VotingComponent implements OnInit {
         //   vote:[null, RxwebValidators.required]
         // })
         new FormGroup({
-          'vote': new FormControl(Validators.required, RxwebValidators.unique())
+          'vote': new FormControl(+i+1, [Validators.required, Validators.max(26), Validators.min(1), RxwebValidators.unique()])
         })
       );
     }
@@ -192,18 +221,43 @@ export class VotingComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isLoading = true;
     this.dataStorageService.fetchContacts().subscribe(
       (resData: SongDB[]) => {
         for(let i = 0; i < 26; ++i) {
-          if(this.login == 'juco') {
-            resData[i].points.juco = this.songControls[i].value;
-          } else {
-            resData[i].points.teco = this.songControls[i].value;
+          // if(this.login == 'juco') {
+          //   resData[i].points.juco = this.songControls[i].value;
+          // } else {
+          //   resData[i].points.maco = this.songControls[i].value;
+          // }
+          let j = _.findIndex(resData, item => { return item.countryName === this.songs[i].countryName });
+          switch (this.login) {
+            case 'juco':
+              resData[j].points.juco = this.songControls[i].get('vote').value;
+              break;
+            case 'lea':
+              resData[j].points.lea = this.songControls[i].get('vote').value;
+              break;
+            case 'matija':
+              resData[j].points.matija = this.songControls[i].get('vote').value;
+              break;
+            case 'renato':
+              resData[j].points.renato = this.songControls[i].get('vote').value;
+              break;
+            case 'teco':
+              resData[j].points.teco = this.songControls[i].get('vote').value;
+              break;
+            default:
+              break;
           }
         }
         this.votingService.setSongs(resData);
-        this.dataStorageService.storeContacts().subscribe();
-        this.router.navigate(['/result']);
+        this.dataStorageService.storeContacts().subscribe(
+          () => {
+            this.isLoading = false;
+            this.router.navigate(['/result']);
+          }
+        );
       }
     );
   }
@@ -217,6 +271,10 @@ export class VotingComponent implements OnInit {
       this.songs[i].countryFlag,
       this.songs[i].countryName
     )
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.songs, event.previousIndex, event.currentIndex);
   }
 
 }

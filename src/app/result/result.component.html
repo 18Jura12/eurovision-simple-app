@@ -1,17 +1,67 @@
-<div class="row">
+<!-- <div class="row">
   <div
-    class="col-md-10"
-    *ngFor="let song of songs; let i = index;">
+    class="flex-col col-md-12"
+    *ngFor="let song of sortResults(); let i = index;">
     <div class="btn-group m-2 p-1">
       <button class="btn btn-outline-secondary">
         <span [ngClass]="'h3 flag-icon flag-icon-'+ song.countryFlag"></span>
       </button>
-      <button class="btn btn-outline-info">
-        <span class="h4"> jučo: {{song.points.juco < 10 ? ('0' + song.points.juco) : song.points.juco}}  |  tečo: {{song.points.teco < 10 ? ('0' + song.points.teco) : song.points.teco}} </span>
+      <button class="btn btn-outline-info px-3">
+        <div class="row">
+          <div class="col-xs-12">
+            <table class="table table-bordered table-sm mr-1 mb-n1">
+              <tr>
+                <td
+                  *ngFor="let person of song.votes">
+                        {{ person[0] }}: {{person[1] < 10 ? ('0' + person[1]) : person[1]}}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
       </button>
       <button class="btn btn-outline-info">
-        <span class="h4"> result: {{(+song.points.juco + +song.points.teco < 10) ? ('0' + (+song.points.juco + +song.points.teco)) : (+song.points.juco + +song.points.teco)}} </span>
+        <span class="h4"> result: {{ song.getTotal() }} </span>
       </button>
     </div>
   </div>
+</div> -->
+<table
+  class="table table-sm"
+  data-mobile-responsive="true">
+<thead class="thead-dark">
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col" sortable="name" (sort)="onSort($event)">Country</th>
+    <th class="text-center w-10" scope="col" sortable="juco" (sort)="onSort($event)">Jučo</th>
+    <th class="text-center w-10" scope="col" sortable="lea" (sort)="onSort($event)">Lea</th>
+    <th class="text-center w-10" scope="col" sortable="matija" (sort)="onSort($event)">Matija</th>
+    <th class="text-center w-10" scope="col" sortable="renato" (sort)="onSort($event)">Renato</th>
+    <th class="text-center w-10" scope="col" sortable="teco" (sort)="onSort($event)">Tečo</th>
+    <th class="text-center" scope="col" sortable="result" (sort)="onSort($event)">Result</th>
+    <th class="text-center" scope="col">Order</th>
+  </tr>
+</thead>
+<tbody class="table-primary">
+  <tr *ngFor="let song of songs; let i = index">
+    <th scope="row" class="align-middle">{{ +i + 1 }}</th>
+    <td class="align-middle">
+      <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+      <span class="h5"> {{ song.countryName }}</span>
+    </td>
+    <td
+      class="text-secondary text-center font-weight-bold align-middle"
+      *ngFor="let person of song.votes">
+      {{ person[1] | number }}
+      <!-- {{person[1] < 10 ? ('0' + person[1]) : person[1] | number}} -->
+    </td>
+    <td class="font-weight-bold text-primary text-center align-middle">{{ song.getTotal() | number}}</td>
+    <td class="align-middle text-secondary text-bold text-center">{{ +songsOrder.indexOf(song) + 1 }}</td>
+  </tr>
+</tbody>
+</table>
+<div
+  *ngIf="isLoading"
+  style="text-align: center;">
+  <app-loading-spinner></app-loading-spinner>
 </div>
