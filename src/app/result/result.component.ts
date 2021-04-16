@@ -62,9 +62,10 @@ export class ResultComponent implements OnInit {
               res.points
             )
           );
-          this.votingService.setSongs(this.songs);
-          this.songsOrder = this.songs;
         }
+        this.votingService.setSongs(this.songs);
+        this.songsOrder = this.songs.slice();
+        this.songs = this.sortResults();
       }
     );
   }
@@ -82,12 +83,16 @@ export class ResultComponent implements OnInit {
 
     // sorting countries
     if (direction === '' || column === '') {
-      this.songs = this.votingService.getSongs();
+      this.songs = this.sortResults();
+    } else if(column === 'order'){
+      this.songs = direction === 'asc' ?
+        this.songsOrder.slice() : this.songsOrder.slice().reverse();
     } else if(column === 'name'){
-      this.songs = _.orderBy(this.votingService.getSongs(), 'countryName', [direction]);
+      this.songs = _.orderBy(
+        this.songs, 'countryName', [direction]);
     } else if(column === 'result') {
       this.songs = _.orderBy(
-        this.votingService.getSongs(),
+        this.songs,
         [
           item => item.getTotal(),
           item => _.min(_.toArray(item.points))
@@ -95,18 +100,45 @@ export class ResultComponent implements OnInit {
         [direction]);
     } else {
       this.songs = _.orderBy(
-        this.votingService.getSongs(),
+        this.songs,
         item => item.points[column],
         [direction]
       );
     }
   }
 
-  // sortResults() {
-  //   return this.songs.sort(
-  //     (a: SongDB, b: SongDB) => {
-  //       return +a.getTotal() < +b.getTotal() ? 1 : 0;
-  //   });
-  // }
+  sortResults() {
+    return _.orderBy(
+      this.songs.slice(),
+      [
+        item => item.getTotal(),
+        item => _.min(_.toArray(item.points))
+      ]);
+  }
+
+  placement(song: SongDB) {
+    let array = this.sortResults();
+    let style = '';
+    if(array[0] === song) {
+      style = 'gold'
+    } else if(array[1] == song) {
+      style = 'silver'
+    } else if(array[2] == song) {
+      style = '#CD7F32'
+    }
+    return style;
+  }
+
+  color(vote: number) {
+    let style = '';
+    if(vote === 1) {
+      style = 'gold'
+    } else if(vote == 2) {
+      style = 'silver'
+    } else if(vote == 3) {
+      style = '#CD7F32'
+    }
+    return style;
+  }
 
 }
