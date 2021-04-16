@@ -95,8 +95,8 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
-              "src/euro.png",
-              "src/assets"
+              "src/assets",
+              "src/assets/icon.png"
             ],
             "styles": [
               "src/styles.less"
