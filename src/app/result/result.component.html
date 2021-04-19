@@ -43,7 +43,7 @@
         <th class="text-center" scope="col" sortable="order" (sort)="onSort($event)">Order</th>
       </tr>
     </thead>
-    <tbody class="table-primary over">
+    <tbody class="over table-primary">
       <tr
         *ngFor="let song of songs; let i = index"
         [ngStyle]="{'background-color': placement(song)}">
