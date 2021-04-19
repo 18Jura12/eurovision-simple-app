@@ -6,6 +6,7 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { DataStorageService } from '../shared/data-storage.service';
 import { SongDB, VotingService } from './voting.service';
 import * as _ from 'lodash';
+import { Toast, ToastrService } from 'ngx-toastr';
 
 export class Song {
   constructor(
@@ -184,6 +185,7 @@ export class VotingComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private toastrService: ToastrService,
     private route: ActivatedRoute,
     private builder: FormBuilder,
     private votingService: VotingService,
@@ -200,6 +202,7 @@ export class VotingComponent implements OnInit {
     // this.dataStorageService.storeContacts().subscribe(
     //   // resData => console.log(resData)
     // );
+    this.toastrService.info('Drag items in order from first(1) to last(26)');
   }
 
   initForm() {

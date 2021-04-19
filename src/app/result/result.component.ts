@@ -3,6 +3,7 @@ import { DataStorageService } from '../shared/data-storage.service';
 import { Song } from '../voting/voting.component';
 import { SongDB, VotingService } from '../voting/voting.service';
 import * as _ from 'lodash';
+import { ToastrService } from 'ngx-toastr';
 
 export type SortColumn = string;
 export type SortDirection = 'asc' | 'desc' | '';
@@ -45,6 +46,7 @@ export class ResultComponent implements OnInit {
 
   constructor(
     private votingService: VotingService,
+    private toastrService: ToastrService,
     private dataStorageService: DataStorageService
   ) { }
 
@@ -68,6 +70,7 @@ export class ResultComponent implements OnInit {
         this.songs = this.sortResults();
       }
     );
+    this.toastrService.info('sort by taping the column header');
   }
 
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
