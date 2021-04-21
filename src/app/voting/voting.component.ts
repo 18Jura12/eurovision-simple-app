@@ -26,43 +26,7 @@ export class VotingComponent implements OnInit {
   voteForm: FormGroup;
   songs: SongDB[] = [
     new SongDB(
-      'bg' , 'Bulgaria',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'it', 'Italy',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'ie', 'Republic of Ireland',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'az', 'Azerbaijan',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'ua', 'Ukraine',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'ee', 'Estonia',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'es', 'Spain',
+      'be' , 'Belgium',
       {
         juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
       }
@@ -74,67 +38,25 @@ export class VotingComponent implements OnInit {
       }
     ),
     new SongDB(
+      'nl', 'The Netherlands',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'az', 'Azerbaijan',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
       'hu', 'Hungary',
       {
         juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
       }
     ),
     new SongDB(
-      'lv', 'Latvia',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'hr', 'Croatia',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'fr', 'France',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'cy', 'Cyprus',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'dk', 'Denmark',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'gr', 'Greece',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'is', 'Iceland',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'de', 'Germany',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'lt', 'Lithuania',
-      {
-        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'nl', 'The Netherlands',
+      'it', 'Italy',
       {
         juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
       }
@@ -146,19 +68,25 @@ export class VotingComponent implements OnInit {
       }
     ),
     new SongDB(
-      'mk', 'North Macedonia',
+      'bg', 'Bulgaria',
       {
         juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
       }
     ),
     new SongDB(
-      'mt', 'Malta',
+      'se', 'Sweden',
       {
         juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
       }
     ),
     new SongDB(
-      'no', 'Norway',
+      'de', 'Germany',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'fr', 'France',
       {
         juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
       }
@@ -170,13 +98,85 @@ export class VotingComponent implements OnInit {
       }
     ),
     new SongDB(
-      'pt', 'Portugal',
+      'au', 'Australia',
       {
         juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
       }
     ),
     new SongDB(
-      'ro', 'Romania',
+      'cy', 'Cyprus',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'rs', 'Serbia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'lt', 'Lithuania',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'hr', 'Croatia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ru', 'Russia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'es', 'Spain',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'lv', 'Latvia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ua', 'Ukraine',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'mt', 'Malta',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'ge', 'Georgia',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'at', 'Austria',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'gb', 'United Kingdom',
+      {
+        juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
+      }
+    ),
+    new SongDB(
+      'am', 'Armenia',
       {
         juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
       }
