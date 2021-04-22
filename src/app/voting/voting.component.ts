@@ -235,6 +235,9 @@ export class VotingComponent implements OnInit {
           // }
           let j = _.findIndex(resData, item => { return item.countryName === this.songs[i].countryName });
           switch (this.login) {
+            case 'johnny':
+              resData[j].points.johnny = this.songControls[i].get('vote').value;
+              break;
             case 'juco':
               resData[j].points.juco = this.songControls[i].get('vote').value;
               break;

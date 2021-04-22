@@ -26,48 +26,68 @@
     </div>
   </div>
 </div> -->
-<div class="container">
   <table
     class="table table-sm"
     data-mobile-responsive="true">
     <thead class="thead-dark">
       <tr>
-        <th scope="col">#</th>
-        <th scope="col" sortable="name" (sort)="onSort($event)">Country</th>
-        <th class="text-center" scope="col" sortable="juco" (sort)="onSort($event)">Jučo</th>
-        <th class="text-center" scope="col" sortable="lea" (sort)="onSort($event)">Lea</th>
-        <th class="text-center" scope="col" sortable="matija" (sort)="onSort($event)">Matija</th>
-        <th class="text-center" scope="col" sortable="renato" (sort)="onSort($event)">Renato</th>
-        <th class="text-center" scope="col" sortable="teco" (sort)="onSort($event)">Tečo</th>
-        <th class="text-center" scope="col" sortable="result" (sort)="onSort($event)">Result</th>
-        <th class="text-center" scope="col" sortable="order" (sort)="onSort($event)">Order</th>
+        <th style="width: 8%;" scope="col">#</th>
+        <th style="width: 25%;" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
+        <th style="width: 8%;" class="text-center" scope="col" sortable="johnny" (sort)="onSort($event)">Johnny</th>
+        <th style="width: 8%;" class="text-center" scope="col" sortable="juco" (sort)="onSort($event)">Jučo</th>
+        <th style="width: 8%;" class="text-center" scope="col" sortable="lea" (sort)="onSort($event)">Lea</th>
+        <th style="width: 8%;" class="text-center" scope="col" sortable="matija" (sort)="onSort($event)">Matija</th>
+        <th style="width: 8%;" class="text-center" scope="col" sortable="renato" (sort)="onSort($event)">Renato</th>
+        <th style="width: 8%;" class="text-center" scope="col" sortable="teco" (sort)="onSort($event)">Tečo</th>
+        <th style="width: 9%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">Result</th>
+        <th style="width: 9%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">Order</th>
       </tr>
     </thead>
-    <tbody class="over table-primary">
+    <tbody class="over">
       <tr
         *ngFor="let song of songs; let i = index"
         [ngStyle]="{'background-color': placement(song)}">
-        <th scope="row" class="align-middle">{{ +i + 1 }}</th>
-        <td class="align-middle">
+        <td
+          style="width: 8%;"
+          class="align-middle font-weight-bold">
+          {{ +i + 1 }}
+        </td>
+        <td
+          style="width: 25%;"
+          class="align-middle">
           <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
           <span class="h5"> {{ song.countryName }}</span>
         </td>
         <td
+          style="width: 8%;"
           class="text-secondary text-center font-weight-bold align-middle"
           *ngFor="let person of song.votes">
-          <span [ngStyle]="{'color': color(person[1]), 'background-color': color(person[1]) !== '' ? 'black' : ''}">
+          <span [ngStyle]="{
+                              'color': color(person[1]),
+                              '-webkit-text-stroke-width': color(person[1]) === '' ? '' : '.5px',
+                              '-webkit-text-stroke-color': 'black'
+                           }">
             &nbsp;{{ person[1] | number }}&nbsp;
           </span>
           <!-- {{person[1] < 10 ? ('0' + person[1]) : person[1] | number}} -->
         </td>
-        <td class="font-weight-bold text-primary text-center align-middle">{{ song.getTotal() | number}}</td>
-        <td class="align-middle text-secondary text-bold text-center">{{ +songsOrder.indexOf(song) + 1 }}</td>
+        <td
+          style="width: 9%;"
+          class="font-weight-bold text-primary text-center align-middle">
+          {{ song.getTotal() | number}}
+        </td>
+        <td
+          style="width: 9%;"
+          class="align-middle text-secondary text-bold text-center">
+          {{ +songsOrder.indexOf(song) + 1 }}
+        </td>
       </tr>
     </tbody>
   </table>
-</div>
 <div
   *ngIf="isLoading"
   style="text-align: center;">
   <app-loading-spinner></app-loading-spinner>
 </div>
+<button class="btn btn-success border border-dark text-dark m-3" (click)="onVote()">To Voting</button>
+

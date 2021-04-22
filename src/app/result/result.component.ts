@@ -4,6 +4,7 @@ import { Song } from '../voting/voting.component';
 import { SongDB, VotingService } from '../voting/voting.service';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 export type SortColumn = string;
 export type SortDirection = 'asc' | 'desc' | '';
@@ -47,7 +48,8 @@ export class ResultComponent implements OnInit {
   constructor(
     private votingService: VotingService,
     private toastrService: ToastrService,
-    private dataStorageService: DataStorageService
+    private dataStorageService: DataStorageService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -123,11 +125,13 @@ export class ResultComponent implements OnInit {
     let array = this.sortResults();
     let style = '';
     if(array[0] === song) {
-      style = 'gold'
+      style = 'rgba(255, 215, 0, 0.8)';
     } else if(array[1] == song) {
-      style = 'silver'
+      style = 'rgba(231, 231, 231, 0.8)';
     } else if(array[2] == song) {
-      style = '#CD7F32'
+      style = 'rgba(195, 137, 60, 0.8)';
+    } else {
+      style = 'rgba(170, 247, 250, 0.8)';
     }
     return style;
   }
@@ -135,13 +139,17 @@ export class ResultComponent implements OnInit {
   color(vote: number) {
     let style = '';
     if(vote === 1) {
-      style = 'gold'
+      style = 'gold';
     } else if(vote == 2) {
-      style = 'silver'
+      style = 'rgb(250, 250, 250)';
     } else if(vote == 3) {
-      style = '#CD7F32'
+      style = '#CD7F32';
     }
     return style;
+  }
+
+  onVote() {
+    this.router.navigate(['login']);
   }
 
 }
