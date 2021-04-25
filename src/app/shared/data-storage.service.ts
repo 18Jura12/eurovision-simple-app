@@ -14,14 +14,14 @@ export class DataStorageService {
   storeContacts() {
     const contacts = this.votingService.getSongs();
     return this.http.put(
-      'https://angular-project-58125-default-rtdb.firebaseio.com/songs.json',
+      'https://sm-euro-default-rtdb.europe-west1.firebasedatabase.app/songs.json',
       contacts
     );
   }
 
   fetchContacts() {
     return this.http.get<SongDB[]>(
-      'https://angular-project-58125-default-rtdb.firebaseio.com/songs.json'
+      'https://sm-euro-default-rtdb.europe-west1.firebasedatabase.app/songs.json'
     );
   }
 

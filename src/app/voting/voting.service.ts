@@ -129,60 +129,6 @@ export class VotingService {
       {
         johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
       }
-    ),
-    new SongDB(
-      'ru', 'Russia',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'es', 'Spain',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'lv', 'Latvia',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'ua', 'Ukraine',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'mt', 'Malta',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'ge', 'Georgia',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'at', 'Austria',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'gb', 'United Kingdom',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'am', 'Armenia',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
     )
   ];
 

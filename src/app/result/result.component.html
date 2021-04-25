@@ -26,68 +26,85 @@
     </div>
   </div>
 </div> -->
-  <table
-    class="table table-sm"
-    data-mobile-responsive="true">
-    <thead class="thead-dark">
-      <tr>
-        <th style="width: 8%;" scope="col">#</th>
-        <th style="width: 25%;" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
-        <th style="width: 8%;" class="text-center" scope="col" sortable="johnny" (sort)="onSort($event)">Johnny</th>
-        <th style="width: 8%;" class="text-center" scope="col" sortable="juco" (sort)="onSort($event)">Jučo</th>
-        <th style="width: 8%;" class="text-center" scope="col" sortable="lea" (sort)="onSort($event)">Lea</th>
-        <th style="width: 8%;" class="text-center" scope="col" sortable="matija" (sort)="onSort($event)">Matija</th>
-        <th style="width: 8%;" class="text-center" scope="col" sortable="renato" (sort)="onSort($event)">Renato</th>
-        <th style="width: 8%;" class="text-center" scope="col" sortable="teco" (sort)="onSort($event)">Tečo</th>
-        <th style="width: 9%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">Result</th>
-        <th style="width: 9%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">Order</th>
-      </tr>
-    </thead>
-    <tbody class="over">
-      <tr
-        *ngFor="let song of songs; let i = index"
-        [ngStyle]="{'background-color': placement(song)}">
-        <td
-          style="width: 8%;"
-          class="align-middle font-weight-bold">
-          {{ +i + 1 }}
-        </td>
-        <td
-          style="width: 25%;"
-          class="align-middle">
-          <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
-          <span class="h5"> {{ song.countryName }}</span>
-        </td>
-        <td
-          style="width: 8%;"
-          class="text-secondary text-center font-weight-bold align-middle"
-          *ngFor="let person of song.votes">
-          <span [ngStyle]="{
-                              'color': color(person[1]),
-                              '-webkit-text-stroke-width': color(person[1]) === '' ? '' : '.5px',
-                              '-webkit-text-stroke-color': 'black'
-                           }">
-            &nbsp;{{ person[1] | number }}&nbsp;
-          </span>
-          <!-- {{person[1] < 10 ? ('0' + person[1]) : person[1] | number}} -->
-        </td>
-        <td
-          style="width: 9%;"
-          class="font-weight-bold text-primary text-center align-middle">
-          {{ song.getTotal() | number}}
-        </td>
-        <td
-          style="width: 9%;"
-          class="align-middle text-secondary text-bold text-center">
-          {{ +songsOrder.indexOf(song) + 1 }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-<div
-  *ngIf="isLoading"
-  style="text-align: center;">
-  <app-loading-spinner></app-loading-spinner>
+<div class="row">
+  <div class="col-md-10 mt-5">
+    <table
+      class="table table-sm"
+      data-mobile-responsive="true">
+      <thead class="thead-dark">
+        <tr>
+          <th style="width: 4%;" scope="col">#</th>
+          <th style="width: 25%;" scope="col">Country</th>
+          <!-- <th *ngIf="songs[0].points.johnny !== 0" style="width: 9%;" class="text-center" scope="col" sortable="johnny" (sort)="onSort($event)">Johnny</th>
+          <th *ngIf="songs[0].points.juco !== 0" style="width: 9%;" class="text-center" scope="col" sortable="juco" (sort)="onSort($event)">Jučo</th>
+          <th *ngIf="songs[0].points.lea !== 0" style="width: 9%;" class="text-center" scope="col" sortable="lea" (sort)="onSort($event)">Lea</th>
+          <th *ngIf="songs[0].points.matija !== 0" style="width: 9%;" class="text-center" scope="col" sortable="matija" (sort)="onSort($event)">Matija</th>
+          <th *ngIf="songs[0].points.renato !== 0" style="width: 9%;" class="text-center" scope="col" sortable="renato" (sort)="onSort($event)">Renato</th>
+          <th *ngIf="songs[0].points.teco !== 0" style="width: 9%;" class="text-center" scope="col" sortable="teco" (sort)="onSort($event)">Tečo</th>
+          <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">Result</th>
+          <th style="width: 6%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th> -->
+        </tr>
+      </thead>
+      <tbody class="over">
+        <ng-container *ngFor="let song of songsOrder; let i = index">
+          <tr
+            [ngStyle]="{'background-color': placement(song)}">
+            <td
+              class="align-middle font-weight-bold">
+              {{ +i + 1 }}
+            </td>
+            <td
+              class="align-middle">
+              <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+              <span class="h5"> {{ song.countryName }}</span>
+            </td>
+            <!-- <ng-container *ngFor="let person of song.votes">
+              <td
+              class="text-secondary text-center font-weight-bold align-middle"
+              *ngIf="person[1] !== 0">
+              <span [ngStyle]="{
+                                  'color': color(person[1]),
+                                  '-webkit-text-stroke-width': color(person[1]) === '' ? '' : '.5px',
+                                  '-webkit-text-stroke-color': 'black'
+                              }">
+                &nbsp;{{ person[1] | number }}&nbsp;
+              </span>
+              <!- {{person[1] < 10 ? ('0' + person[1]) : person[1] | number}} ->
+            </td>
+            </ng-container>
+            <td
+              class="font-weight-bold text-primary text-center align-middle">
+              {{ song.getTotal() | number}}
+            </td>
+            <td
+              class="align-middle text-secondary text-bold text-center">
+              {{ +songsOrder.indexOf(song) + 1 }}
+            </td> -->
+          </tr>
+        </ng-container>
+      </tbody>
+      </table>
+      <div
+      class="mt-5"
+      *ngIf="isLoading"
+      style="text-align: center;">
+      <app-loading-spinner></app-loading-spinner>
+      </div>
+    </div>
+    <div class="col mt-5">
+      <span style="text-align: center;" class="float-right">
+        <button class="btn btn-success ml-3 mb-3" (click)="onVote()">To Voting</button>
+        <br>
+        <button class="btn btn-info ml-3 mb-3" (click)="onStart()" [disabled]="shown === 10 || !allVoted()">
+        {{ shown === 0 ? 'Start' : isStart ? 'Stop' : 'Continue' }}
+        </button>
+        <button class="btn btn-warning ml-3 mb-3" (click)="shown = 10; isStart=false;" [disabled]="shown === 10 || !allVoted()">
+          Skip
+        </button>
+        <button class="btn btn-danger ml-3" (click)="onReset()" [disabled]="shown === 0">
+          Reset
+        </button>
+      </span>
+    </div>
 </div>
-<button class="btn btn-success border border-dark text-dark m-3" (click)="onVote()">To Voting</button>
 
