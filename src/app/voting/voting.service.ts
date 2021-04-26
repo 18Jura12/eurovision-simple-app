@@ -5,7 +5,7 @@ export class SongDB {
   constructor(
     public countryFlag: string,
     public countryName: string,
-    public points: {
+    public points?: {
       johnny: number,
       juco: number,
       lea: number,
@@ -13,7 +13,19 @@ export class SongDB {
       renato: number,
       teco: number
     }
-  ) {}
+  ) {
+    if(points === undefined) {
+      this.points =
+    {
+      johnny: 0,
+      juco: 0,
+      lea: 0,
+      matija: 0,
+      renato: 0,
+      teco: 0
+    };
+    }
+  }
 
   getTotal() {
     return _.sum(_.values(this.points));
@@ -28,108 +40,22 @@ export class SongDB {
 export class VotingService {
   //@Output() voted = new Subject<string>();
   songs: SongDB[] = [
-    new SongDB(
-      'be' , 'Belgium',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'cz', 'Czechia',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'nl', 'The Netherlands',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'az', 'Azerbaijan',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'hu', 'Hungary',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'it', 'Italy',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'il', 'Israel',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'bg', 'Bulgaria',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'se', 'Sweden',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'de', 'Germany',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'fr', 'France',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'pl', 'Poland',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'au', 'Australia',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'cy', 'Cyprus',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'rs', 'Serbia',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'lt', 'Lithuania',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    ),
-    new SongDB(
-      'hr', 'Croatia',
-      {
-        johnny: 0, juco: 0, lea: 0, matija: 0, renato: 0, teco: 0
-      }
-    )
+    new SongDB('lt' , 'Lithuania'),
+    new SongDB('si' , 'Slovenia'),
+    new SongDB('ru' , 'Russia'),
+    new SongDB('se' , 'Sweden'),
+    new SongDB('au' , 'Australia'),
+    new SongDB('mk' , 'North Macedonia'),
+    new SongDB('ie' , 'Ireland'),
+    new SongDB('cy' , 'Cyprus'),
+    new SongDB('no' , 'Norway'),
+    new SongDB('hr' , 'Croatia'),
+    new SongDB('be' , 'Belgium'),
+    new SongDB('il' , 'Israel'),
+    new SongDB('ro' , 'Romania'),
+    new SongDB('az' , 'Azerbaijan'),
+    new SongDB('ua' , 'Ukraine'),
+    new SongDB('mt' , 'Malta')
   ];
 
   getSongs() {

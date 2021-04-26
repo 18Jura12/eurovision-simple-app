@@ -198,7 +198,7 @@ export class ResultComponent implements OnInit, OnDestroy {
     let array = this.songs[0].votes;
     for(let vote of array) {
       if(vote[1] === 0) {
-        return false;
+        return true;
       }
     }
     return true;
