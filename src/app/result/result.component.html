@@ -95,10 +95,10 @@
       <span style="text-align: center;" class="float-right">
         <button class="btn btn-success ml-3 mb-3" (click)="onVote()">To Voting</button>
         <br>
-        <button class="btn btn-info ml-3 mb-3" (click)="onStart()" [disabled]="shown === 10 || !allVoted()">
+        <button class="btn btn-info ml-3 mb-3" (click)="onStart()" [disabled]="shown === 10">
         {{ shown === 0 ? 'Start' : isStart ? 'Stop' : 'Continue' }}
         </button>
-        <button class="btn btn-warning ml-3 mb-3" (click)="shown = 10; isStart=false;" [disabled]="shown === 10 || !allVoted()">
+        <button class="btn btn-warning ml-3 mb-3" (click)="shown = 10; isStart=false;" [disabled]="shown === 10">
           Skip
         </button>
         <button class="btn btn-danger ml-3" (click)="onReset()" [disabled]="shown === 0">
