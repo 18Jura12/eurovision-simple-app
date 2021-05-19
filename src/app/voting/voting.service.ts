@@ -40,22 +40,23 @@ export class SongDB {
 export class VotingService {
   //@Output() voted = new Subject<string>();
   songs: SongDB[] = [
-    new SongDB('lt' , 'Lithuania'),
-    new SongDB('si' , 'Slovenia'),
-    new SongDB('ru' , 'Russia'),
-    new SongDB('se' , 'Sweden'),
-    new SongDB('au' , 'Australia'),
-    new SongDB('mk' , 'North Macedonia'),
-    new SongDB('ie' , 'Ireland'),
-    new SongDB('cy' , 'Cyprus'),
-    new SongDB('no' , 'Norway'),
-    new SongDB('hr' , 'Croatia'),
-    new SongDB('be' , 'Belgium'),
-    new SongDB('il' , 'Israel'),
-    new SongDB('ro' , 'Romania'),
-    new SongDB('az' , 'Azerbaijan'),
-    new SongDB('ua' , 'Ukraine'),
-    new SongDB('mt' , 'Malta')
+    new SongDB('sm' , 'San Marino'),
+    new SongDB('ee' , 'Estonia'),
+    new SongDB('cz' , 'Czechia'),
+    new SongDB('gr' , 'Greece'),
+    new SongDB('at' , 'Austria'),
+    new SongDB('pl' , 'Poland'),
+    new SongDB('md' , 'Moldova'),
+    new SongDB('is' , 'Iceland'),
+    new SongDB('rs' , 'Serbia'),
+    new SongDB('ge' , 'Georgia'),
+    new SongDB('al' , 'Albania'),
+    new SongDB('pt' , 'Portugal'),
+    new SongDB('bg' , 'Bulgaria'),
+    new SongDB('fi' , 'Finland'),
+    new SongDB('lv' , 'Latvia'),
+    new SongDB('ch' , 'Switzerland'),
+    new SongDB('dk' , 'Denmark')
   ];
 
   getSongs() {
