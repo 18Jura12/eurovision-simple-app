@@ -102,13 +102,13 @@ export class VotingComponent implements OnInit {
             case 'juco':
               resData[j].points.juco = this.songControls[i].get('vote').value;
               break;
-            case 'lea':
+            case 'nika':
               resData[j].points.nika = this.songControls[i].get('vote').value;
               break;
             case 'matija':
               resData[j].points.matija = this.songControls[i].get('vote').value;
               break;
-            case 'renato':
+            case 'marko':
               resData[j].points.marko = this.songControls[i].get('vote').value;
               break;
             case 'teco':

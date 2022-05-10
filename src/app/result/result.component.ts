@@ -129,7 +129,7 @@ export class ResultComponent implements OnInit, OnDestroy {
     if(array.indexOf(song) !== -1) {
       style = 'rgba(255, 215, 0, 0.8)';
     } else {
-      style = 'rgba(170, 247, 250, 0.8)';
+      style = 'rgba(200, 0, 0, 0.6)';
     }
     return style;
   }
