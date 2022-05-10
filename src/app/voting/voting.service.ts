@@ -8,9 +8,9 @@ export class SongDB {
     public points?: {
       johnny: number,
       juco: number,
-      lea: number,
+      nika: number,
       matija: number,
-      renato: number,
+      marko: number,
       teco: number
     }
   ) {
@@ -19,9 +19,9 @@ export class SongDB {
     {
       johnny: 0,
       juco: 0,
-      lea: 0,
+      nika: 0,
       matija: 0,
-      renato: 0,
+      marko: 0,
       teco: 0
     };
     }
@@ -40,23 +40,23 @@ export class SongDB {
 export class VotingService {
   //@Output() voted = new Subject<string>();
   songs: SongDB[] = [
-    new SongDB('sm' , 'San Marino'),
-    new SongDB('ee' , 'Estonia'),
-    new SongDB('cz' , 'Czechia'),
-    new SongDB('gr' , 'Greece'),
-    new SongDB('at' , 'Austria'),
-    new SongDB('pl' , 'Poland'),
-    new SongDB('md' , 'Moldova'),
-    new SongDB('is' , 'Iceland'),
-    new SongDB('rs' , 'Serbia'),
-    new SongDB('ge' , 'Georgia'),
     new SongDB('al' , 'Albania'),
-    new SongDB('pt' , 'Portugal'),
-    new SongDB('bg' , 'Bulgaria'),
-    new SongDB('fi' , 'Finland'),
     new SongDB('lv' , 'Latvia'),
+    new SongDB('lt' , 'Lithuania'),
     new SongDB('ch' , 'Switzerland'),
-    new SongDB('dk' , 'Denmark')
+    new SongDB('si' , 'Slovenia'),
+    new SongDB('ua' , 'Ukraine'),
+    new SongDB('bg' , 'Bulgaria'),
+    new SongDB('nl' , 'The Netherlands'),
+    new SongDB('md' , 'Moldova'),
+    new SongDB('pt' , 'Portugal'),
+    new SongDB('hr' , 'Croatia'),
+    new SongDB('dk' , 'Denmark'),
+    new SongDB('at' , 'Austria'),
+    new SongDB('is' , 'Iceland'),
+    new SongDB('gr' , 'Greece'),
+    new SongDB('no' , 'Norway'),
+    new SongDB('am' , 'Armenia')
   ];
 
   getSongs() {

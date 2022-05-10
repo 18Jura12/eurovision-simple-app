@@ -25,23 +25,23 @@ export class VotingComponent implements OnInit {
   isLoading: boolean = false;
   voteForm: FormGroup;
   songs: SongDB[] = [
-    new SongDB('sm' , 'San Marino'),
-    new SongDB('ee' , 'Estonia'),
-    new SongDB('cz' , 'Czechia'),
-    new SongDB('gr' , 'Greece'),
-    new SongDB('at' , 'Austria'),
-    new SongDB('pl' , 'Poland'),
-    new SongDB('md' , 'Moldova'),
-    new SongDB('is' , 'Iceland'),
-    new SongDB('rs' , 'Serbia'),
-    new SongDB('ge' , 'Georgia'),
     new SongDB('al' , 'Albania'),
-    new SongDB('pt' , 'Portugal'),
-    new SongDB('bg' , 'Bulgaria'),
-    new SongDB('fi' , 'Finland'),
     new SongDB('lv' , 'Latvia'),
+    new SongDB('lt' , 'Lithuania'),
     new SongDB('ch' , 'Switzerland'),
-    new SongDB('dk' , 'Denmark')
+    new SongDB('si' , 'Slovenia'),
+    new SongDB('ua' , 'Ukraine'),
+    new SongDB('bg' , 'Bulgaria'),
+    new SongDB('nl' , 'The Netherlands'),
+    new SongDB('md' , 'Moldova'),
+    new SongDB('pt' , 'Portugal'),
+    new SongDB('hr' , 'Croatia'),
+    new SongDB('dk' , 'Denmark'),
+    new SongDB('at' , 'Austria'),
+    new SongDB('is' , 'Iceland'),
+    new SongDB('gr' , 'Greece'),
+    new SongDB('no' , 'Norway'),
+    new SongDB('am' , 'Armenia')
   ];
 
   constructor(
@@ -103,13 +103,13 @@ export class VotingComponent implements OnInit {
               resData[j].points.juco = this.songControls[i].get('vote').value;
               break;
             case 'lea':
-              resData[j].points.lea = this.songControls[i].get('vote').value;
+              resData[j].points.nika = this.songControls[i].get('vote').value;
               break;
             case 'matija':
               resData[j].points.matija = this.songControls[i].get('vote').value;
               break;
             case 'renato':
-              resData[j].points.renato = this.songControls[i].get('vote').value;
+              resData[j].points.marko = this.songControls[i].get('vote').value;
               break;
             case 'teco':
               resData[j].points.teco = this.songControls[i].get('vote').value;
