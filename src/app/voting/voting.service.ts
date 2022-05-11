@@ -9,6 +9,7 @@ export class SongDB {
       johnny: number,
       juco: number,
       nika: number,
+      lucija: number,
       matija: number,
       marko: number,
       teco: number
@@ -20,6 +21,7 @@ export class SongDB {
       johnny: 0,
       juco: 0,
       nika: 0,
+      lucija: 0,
       matija: 0,
       marko: 0,
       teco: 0
@@ -40,23 +42,24 @@ export class SongDB {
 export class VotingService {
   //@Output() voted = new Subject<string>();
   songs: SongDB[] = [
-    new SongDB('al' , 'Albania'),
-    new SongDB('lv' , 'Latvia'),
-    new SongDB('lt' , 'Lithuania'),
-    new SongDB('ch' , 'Switzerland'),
-    new SongDB('si' , 'Slovenia'),
-    new SongDB('ua' , 'Ukraine'),
-    new SongDB('bg' , 'Bulgaria'),
-    new SongDB('nl' , 'The Netherlands'),
-    new SongDB('md' , 'Moldova'),
-    new SongDB('pt' , 'Portugal'),
-    new SongDB('hr' , 'Croatia'),
-    new SongDB('dk' , 'Denmark'),
-    new SongDB('at' , 'Austria'),
-    new SongDB('is' , 'Iceland'),
-    new SongDB('gr' , 'Greece'),
-    new SongDB('no' , 'Norway'),
-    new SongDB('am' , 'Armenia')
+    new SongDB('fi' , 'Finland'),
+    new SongDB('il' , 'Israel'),
+    new SongDB('rs' , 'Serbia'),
+    new SongDB('az' , 'Azerbaijan'),
+    new SongDB('ge' , 'Georgia'),
+    new SongDB('mt' , 'Malta'),
+    new SongDB('sm' , 'San Marino'),
+    new SongDB('au' , 'Australia'),
+    new SongDB('cy' , 'Cyprus'),
+    new SongDB('ie' , 'Republic of Ireland'),
+    new SongDB('mk' , 'North Macedonia'),
+    new SongDB('ee' , 'Estonia'),
+    new SongDB('ro' , 'Romania'),
+    new SongDB('pl' , 'Poland'),
+    new SongDB('me' , 'Montenegro'),
+    new SongDB('be' , 'Belgium'),
+    new SongDB('se' , 'Sweden'),
+    new SongDB('cz' , 'Czechia')
   ];
 
   getSongs() {

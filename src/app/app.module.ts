@@ -10,7 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { VotingComponent } from './voting/voting.component';
-import { ResultComponent } from './result/result.component';
+import { NgbdSortableHeader, ResultComponent } from './result/result.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 
@@ -20,6 +20,7 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     LoginComponent,
     VotingComponent,
     ResultComponent,
+    NgbdSortableHeader,
     LoadingSpinnerComponent
   ],
   imports: [

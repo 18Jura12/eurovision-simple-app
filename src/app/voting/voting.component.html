@@ -14,23 +14,23 @@
               <div class="col-xs-1">
                 <input
                 type="number"
-                style="width: 50px;"
+                style="width: 50px; font-weight: bold;"
                 formControlName="vote"
                 class="form-control handler"
                 readonly
                 z>
               </div>
-              <div class="example-box input-group-append rounded-left">
-                <button class="btn btn-outline-secondary text-dark rounded-left" disabled>
+              <div class="example-box input-group-append rounded">
+                <button class="tag btn" disabled>
                   <span [ngClass]="' flag-icon flag-icon-'+ getSongDetails(i).countryFlag"></span>
-                  <span class="name text-center text-info">  {{ getSongDetails(i).countryName }}</span>
+                  <span class="name text-center text-danger">  {{ getSongDetails(i).countryName }}</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
         <button
-          class="btn btn-dark m-3"
+          class="vote btn btn-dark m-3 rounded"
           [disabled]="voteForm.invalid">Vote
         </button>
         <span

@@ -25,23 +25,24 @@ export class VotingComponent implements OnInit {
   isLoading: boolean = false;
   voteForm: FormGroup;
   songs: SongDB[] = [
-    new SongDB('al' , 'Albania'),
-    new SongDB('lv' , 'Latvia'),
-    new SongDB('lt' , 'Lithuania'),
-    new SongDB('ch' , 'Switzerland'),
-    new SongDB('si' , 'Slovenia'),
-    new SongDB('ua' , 'Ukraine'),
-    new SongDB('bg' , 'Bulgaria'),
-    new SongDB('nl' , 'The Netherlands'),
-    new SongDB('md' , 'Moldova'),
-    new SongDB('pt' , 'Portugal'),
-    new SongDB('hr' , 'Croatia'),
-    new SongDB('dk' , 'Denmark'),
-    new SongDB('at' , 'Austria'),
-    new SongDB('is' , 'Iceland'),
-    new SongDB('gr' , 'Greece'),
-    new SongDB('no' , 'Norway'),
-    new SongDB('am' , 'Armenia')
+    new SongDB('fi' , 'Finland'),
+    new SongDB('il' , 'Israel'),
+    new SongDB('rs' , 'Serbia'),
+    new SongDB('az' , 'Azerbaijan'),
+    new SongDB('ge' , 'Georgia'),
+    new SongDB('mt' , 'Malta'),
+    new SongDB('sm' , 'San Marino'),
+    new SongDB('au' , 'Australia'),
+    new SongDB('cy' , 'Cyprus'),
+    new SongDB('ie' , 'Republic of Ireland'),
+    new SongDB('mk' , 'North Macedonia'),
+    new SongDB('ee' , 'Estonia'),
+    new SongDB('ro' , 'Romania'),
+    new SongDB('pl' , 'Poland'),
+    new SongDB('me' , 'Montenegro'),
+    new SongDB('be' , 'Belgium'),
+    new SongDB('se' , 'Sweden'),
+    new SongDB('cz' , 'Czechia')
   ];
 
   constructor(
@@ -63,18 +64,18 @@ export class VotingComponent implements OnInit {
     // this.dataStorageService.storeContacts().subscribe(
     //   // resData => console.log(resData)
     // );
-    this.toastrService.info('Drag items in order from first(1) to last(17)');
+    this.toastrService.info('Drag items in order from first(1) to last(18)');
   }
 
   initForm() {
     let votes = new FormArray([]);
-    for(let i = 0; i < 17; ++i) {
+    for(let i = 0; i < 18; ++i) {
       votes.push(
         // this.builder.group({
         //   vote:[null, RxwebValidators.required]
         // })
         new FormGroup({
-          'vote': new FormControl(+i+1, [Validators.required, Validators.max(26), Validators.min(1), RxwebValidators.unique()])
+          'vote': new FormControl(+i+1, [Validators.required, Validators.max(18), Validators.min(1), RxwebValidators.unique()])
         })
       );
     }
@@ -88,7 +89,7 @@ export class VotingComponent implements OnInit {
     this.isLoading = true;
     this.dataStorageService.fetchContacts().subscribe(
       (resData: SongDB[]) => {
-        for(let i = 0; i < 17; ++i) {
+        for(let i = 0; i < 18; ++i) {
           // if(this.login == 'juco') {
           //   resData[i].points.juco = this.songControls[i].value;
           // } else {
@@ -104,6 +105,9 @@ export class VotingComponent implements OnInit {
               break;
             case 'nika':
               resData[j].points.nika = this.songControls[i].get('vote').value;
+              break;
+            case 'lucija':
+              resData[j].points.lucija = this.songControls[i].get('vote').value;
               break;
             case 'matija':
               resData[j].points.matija = this.songControls[i].get('vote').value;
