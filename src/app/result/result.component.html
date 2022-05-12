@@ -55,13 +55,13 @@
           <tr
             [ngStyle]="{'background-color': placement(song)}">
             <td
-              class="align-middle font-weight-bold">
+              class="{{setColour(song)}} align-middle font-weight-bold">
               {{ +i + 1 }}
             </td>
             <td
               class="align-middle">
               <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
-              <span class="h5"> {{ song.countryName }}</span>
+              <span class="{{setColour(song)}} h5"> {{ song.countryName }}</span>
             </td>
             <ng-container *ngFor="let person of song.votes">
               <td
@@ -112,13 +112,13 @@
           <tr
             [ngStyle]="{'background-color': placement(song)}">
             <td
-              class="align-middle font-weight-bold">
+              class="{{setColour(song)}} align-middle font-weight-bold">
               {{ +i + 1 }}
             </td>
             <td
               class="align-middle">
               <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
-              <span class="h5 font-weight-bold"> {{ song.countryName }}</span>
+              <span class="h5 {{setColour(song)}}"> {{ song.countryName }}</span>
             </td>
             <!-- <ng-container *ngFor="let person of song.votes">
               <td

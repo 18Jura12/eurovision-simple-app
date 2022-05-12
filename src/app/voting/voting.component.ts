@@ -148,4 +148,8 @@ export class VotingComponent implements OnInit {
     moveItemInArray(this.songs, event.previousIndex, event.currentIndex);
   }
 
+  setClass(i: number) {
+    return i < 10 ? 'nameQ' : 'nameNQ';
+  }
+
 }

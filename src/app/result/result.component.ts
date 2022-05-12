@@ -241,6 +241,20 @@ export class ResultComponent implements OnInit, OnDestroy {
     return style;
   }
 
+  setColour(song: SongDB) {
+    let array = this.songs.slice();
+    while(array.length !== this.shown && !this.table) {
+      array.pop();
+    }
+    let style = '';
+    if(array.indexOf(song) !== -1 ) {
+      style = 'tdQ';
+    } else {
+      style = 'tdNQ';
+    }
+    return style;
+  }
+
   color(vote: number) {
     let style = '';
     if(vote === 1) {
