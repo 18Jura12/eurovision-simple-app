@@ -1,9 +1,8 @@
 import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { DataStorageService } from '../shared/data-storage.service';
-import { Song } from '../voting/voting.component';
 import { SongDB, VotingService } from '../voting/voting.service';
-import * as _ from 'lodash';
-import { ToastrService } from 'ngx-toastr';
+import { LoginComponent } from '../login/login.component';
+import * as _ from 'lodash-es';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 
@@ -42,39 +41,36 @@ export class NgbdSortableHeader {
   styleUrls: ['./result.component.less']
 })
 export class ResultComponent implements OnInit, OnDestroy {
+  jury: boolean = false;
   songs: SongDB[] = [];
   songsOrder: SongDB[] = [];
   songsOrder1: SongDB[] = [];
   isLoading: boolean = false;
   private _shown: number = 0;
   isStart = false;
-  sub: Subscription;
+  sub!: Subscription;
   source = interval(5000);
   table: boolean = false;
 
   constructor(
     private votingService: VotingService,
-    private toastrService: ToastrService,
     private dataStorageService: DataStorageService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.dataStorageService.fetchContacts().subscribe(
-      resData => {
+    this.dataStorageService.fetchAllVotes().subscribe(
+      allVotes => {
         this.isLoading = false;
-        //console.log(resData);
-        for(let res of resData) {
-          this.songs.push(
-            new SongDB(
-              res.countryFlag,
-              res.countryName,
-              res.points
-            )
-          );
+        const songList = this.votingService.getSongs();
+        for(let song of songList) {
+          const points: {[key: string]: number} = {};
+          for(let user of LoginComponent.users) {
+            points[user] = allVotes?.[user]?.[song.countryName] ?? 0;
+          }
+          this.songs.push(new SongDB(song.countryFlag, song.countryName, points));
         }
-        //console.log(this.songs);
         this.votingService.setSongs(this.songs);
         this.songsOrder = this.songs.slice();
         this.songsOrder1 = this.songsOrder.slice();
@@ -87,7 +83,7 @@ export class ResultComponent implements OnInit, OnDestroy {
     );
   }
 
-  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
+  @ViewChildren(NgbdSortableHeader) headers!: QueryList<NgbdSortableHeader>;
 
   onSort({column, direction}: SortEvent) {
 
@@ -113,7 +109,9 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.songsOrder = _.orderBy(
         this.songsOrder,
         [
+          // first sort by points
           item => item.getTotal(),
+          // then sort by the highest place given
           item => {
             let array = _.toArray(item.points);
             while(_.findIndex(array, e => e === 0) !== -1) {
@@ -121,41 +119,47 @@ export class ResultComponent implements OnInit, OnDestroy {
             }
             return _.min(array);
           },
+          //then sort by the highest amount of highest place given
           item => {
             let array = _.toArray(item.points);
+            console.log(array);
             while(array.indexOf(0) !== -1) {
               array.splice(array.indexOf(0), 1);
             }
-            return  _.countBy(array)[_.min(array)];
+            return  _.countBy(array)[_.min(array)!.toString()];
           },
+          //then sort by the second highest place given
           item => {
             let array = _.toArray(item.points);
+            console.log(array);
             while(array.indexOf(0) !== -1) {
               array.splice(array.indexOf(0), 1);
             }
             let min = _.min(array);
-            while(array.indexOf(min) !== -1) {
-              array.splice(array.indexOf(min), 1);
+            while(array.indexOf(min!) !== -1) {
+              array.splice(array.indexOf(min!), 1);
             }
-            return _.min(array);
+            return array.length ? _.min(array) : 0;
           },
+          //then sort by the highest amount of second highest place given
           item => {
             let array = _.toArray(item.points);
+            console.log(array);
             while(array.indexOf(0) !== -1) {
               array.splice(array.indexOf(0), 1);
             }
             let min = _.min(array);
-            while(array.indexOf(min) !== -1) {
-              array.splice(array.indexOf(min), 1);
+            while(array.indexOf(min!) !== -1) {
+              array.splice(array.indexOf(min!), 1);
             }
-            return _.countBy(array)[_.min(array)];
+            return array.length ? _.countBy(array)[_.min(array)!.toString()] : 0;
           }
         ],
         [direction]);
     } else {
       this.songsOrder = _.orderBy(
         this.songsOrder,
-        item => item.points[column],
+        item => item.points![column],
         [direction]
       );
     }
@@ -165,9 +169,12 @@ export class ResultComponent implements OnInit, OnDestroy {
     return  _.orderBy(
       this.songsOrder.slice(),
       [
+        this.jury === true ?
+        item => item.getExpWeightTotal() ** (+(-1)) :
         item => item.getTotal(),
         item => {
           let array = _.toArray(item.points);
+          console.log(array);
           while(_.findIndex(array, e => e === 0) !== -1) {
             array.splice(array.indexOf(0), 1);
           }
@@ -175,32 +182,35 @@ export class ResultComponent implements OnInit, OnDestroy {
         },
         item => {
           let array = _.toArray(item.points);
+          console.log(array);
           while(array.indexOf(0) !== -1) {
             array.splice(array.indexOf(0), 1);
           }
-          return  _.countBy(array)[_.min(array)];
+          return  _.countBy(array)[_.min(array)!.toString()];
         },
         item => {
           let array = _.toArray(item.points);
+          console.log(array);
           while(array.indexOf(0) !== -1) {
             array.splice(array.indexOf(0), 1);
           }
           let min = _.min(array);
-          while(array.indexOf(min) !== -1) {
-            array.splice(array.indexOf(min), 1);
+          while(array.indexOf(min!) !== -1) {
+            array.splice(array.indexOf(min!), 1);
           }
-          return _.min(array);
+          return array.length ? _.min(array) : 0;
         },
         item => {
           let array = _.toArray(item.points);
+          console.log(array);
           while(array.indexOf(0) !== -1) {
             array.splice(array.indexOf(0), 1);
           }
           let min = _.min(array);
-          while(array.indexOf(min) !== -1) {
-            array.splice(array.indexOf(min), 1);
+          while(array.indexOf(min!) !== -1) {
+            array.splice(array.indexOf(min!), 1);
           }
-          return _.countBy(array)[_.min(array)];
+          return array.length ? _.countBy(array)[_.min(array)!.toString()] : 0;
         }
       ]
     );
@@ -229,21 +239,21 @@ export class ResultComponent implements OnInit, OnDestroy {
 
   placement(song: SongDB) {
     let array = this.songs.slice();
-    while(array.length !== this.shown && !this.table) {
+    while(array.length !== this.shown) {
       array.pop();
     }
     let style = '';
     if(array.indexOf(song) !== -1 ) {
       style = 'rgba(255, 215, 0, 0.8)';
     } else {
-      style = 'rgba(200, 0, 0, 0.6)';
+      style = 'rgba(255, 238, 0, 0.1)';
     }
     return style;
   }
 
   setColour(song: SongDB) {
     let array = this.songs.slice();
-    while(array.length !== this.shown && !this.table) {
+    while(array.length !== this.shown) {
       array.pop();
     }
     let style = '';
@@ -255,13 +265,13 @@ export class ResultComponent implements OnInit, OnDestroy {
     return style;
   }
 
-  color(vote: number) {
+  color(vote: number): string {
     let style = '';
     if(vote === 1) {
       style = 'gold';
-    } else if(vote == 2) {
+    } else if(vote === 2) {
       style = 'rgb(250, 250, 250)';
-    } else if(vote == 3) {
+    } else if(vote === 3) {
       style = '#CD7F32';
     }
     return style;
@@ -325,6 +335,17 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.isStart = false;
     }
     this.shown = 0;
+  }
+
+  onTable() {
+    this.table = !this.table;
+    this.shown = 10;
+    this.isStart = false;
+  }
+
+  onJury() {
+    this.jury = !this.jury;
+    this.songs = this.sortResults();
   }
 
   allVoted(): boolean {

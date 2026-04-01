@@ -9,18 +9,34 @@ import { LoginService } from './login.service';
 })
 export class LoginComponent implements OnInit {
 
+  static users: string[] = [
+    'Alex',
+    'Ana',
+    'Bruna',
+    'Jurica',
+    'Mario',
+    'Matija',
+    'Nika',
+    'Renato',
+    'Teo'
+  ];
+
   constructor(
     private router: Router,
     private loginService: LoginService
   ) { }
 
   ngOnInit(): void {
-    localStorage.clear();
+    this.loginService.clearUser();
   }
 
-  setLogin(name: string) {
-    this.loginService.changeLogin();
-    this.router.navigate(['/vote', { id: name }]);
+  setLogin(name: string): void {
+    this.loginService.setUser(name);
+    this.router.navigate(['/vote']);
+  }
+
+  get users(): string[] {
+    return LoginComponent.users;
   }
 
 }
