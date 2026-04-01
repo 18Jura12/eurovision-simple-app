@@ -1,27 +1,73 @@
-# Finale
+# Finale — Eurovision Voting App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.0.
+A private Eurovision Song Contest voting app for a group of friends. Supports all years from 2000
+onward, both semi-finals and the grand final. Built with Angular 16 and Firebase.
 
-## Development server
+## Features
+- Drag-and-drop country ranking (1st–last place)
+- Per-user votes stored in Firebase with no race conditions
+- Animated results reveal with Eurovision-style tiebreaker scoring
+- Jury mode (exponential weighted scoring)
+- Admin panel to switch the active year/event without touching code
+- Event catalog auto-populated by scraping eurovisionworld.com
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Tech stack
+- Angular 16
+- Firebase Realtime Database (votes + event catalog)
+- Firebase Hosting
+- Angular CDK drag-drop
+- Bootstrap 5
 
-## Code scaffolding
+## Prerequisites
+- Node.js 16 via nvm: `nvm install 16 && nvm use 16`
+- Firebase CLI: `npm install -g firebase-tools`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Getting started
 
-## Build
+```bash
+npm install
+npx ng serve    # dev server at http://localhost:4200
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Switching the active event
 
-## Running unit tests
+Open `/admin` in the app to pick any year/event from the catalog. The selection is stored in
+`localStorage` and the app reloads using those countries automatically.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+To set a default fallback (used when no admin selection has been made), edit
+`src/app/shared/event-config.ts`:
 
-## Running end-to-end tests
+```typescript
+export const ACTIVE_EVENT: EventConfig = {
+  year: 2025,
+  event: 'SF2',
+  countries: ['Australia', 'Montenegro', ...]
+};
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## Event catalog
 
-## Further help
+Populate the Firebase catalog by scraping eurovisionworld.com (2000–present):
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+node scripts/scrape-events.js
+```
+
+Re-run whenever a new year's data becomes available. Countries are stored under
+`/catalog/{year}/{event}/countries` and never overwrite vote data.
+
+## Deployment
+
+```bash
+npm run deploy   # production build → Firebase Hosting
+```
+
+## Firebase data structure
+
+```
+/catalog/{year}/{event}/countries   ← participating countries per event (from scraper)
+/votes/{year}/{event}/{user}        ← per-user votes, keyed by country name
+```
+
+Each user's vote is a direct `PUT` to their own node — no read-modify-write race conditions,
+no user can accidentally overwrite another's vote.
