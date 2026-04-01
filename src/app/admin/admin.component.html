@@ -1,0 +1,25 @@
+<div class="container mt-4">
+  <h4 class="mb-4">Select Active Event</h4>
+
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <div *ngIf="!isLoading && years.length === 0" class="text-muted">
+    No catalog data found. Run the scraping script first.
+  </div>
+
+  <div *ngFor="let year of years" class="mb-4">
+    <h5 class="text-muted mb-2">{{ year }}</h5>
+    <div class="d-flex gap-2 flex-wrap">
+      <button
+        *ngFor="let event of getEvents(year)"
+        class="btn"
+        [class.btn-success]="isActive(year, event)"
+        [class.btn-outline-secondary]="!isActive(year, event)"
+        (click)="selectEvent(year, event)">
+        {{ event }}
+        <span class="badge bg-light text-dark ms-2">{{ getCountries(year, event).length }}</span>
+        <span *ngIf="isActive(year, event)" class="ms-1">✓</span>
+      </button>
+    </div>
+  </div>
+</div>

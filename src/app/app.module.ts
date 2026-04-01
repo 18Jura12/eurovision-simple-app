@@ -3,16 +3,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import {  RxReactiveFormsModule } from "@rxweb/reactive-form-validators"
+// import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { VotingComponent } from './voting/voting.component';
 import { NgbdSortableHeader, ResultComponent } from './result/result.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { AppComponent } from './app.component';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     VotingComponent,
     ResultComponent,
     NgbdSortableHeader,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +32,6 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     ReactiveFormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    RxReactiveFormsModule,
     DragDropModule
   ],
   providers: [],

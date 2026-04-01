@@ -4,11 +4,13 @@ import { LoginComponent } from './login/login.component';
 import { LoginGuard } from './login/login.guard';
 import { ResultComponent } from './result/result.component';
 import { VotingComponent } from './voting/voting.component';
+import { AdminComponent } from './admin/admin.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'result', component: ResultComponent },
   { path: 'vote', component: VotingComponent, canActivate: [LoginGuard] },
+  { path: 'admin', component: AdminComponent },
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
