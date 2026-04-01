@@ -1,6 +1,7 @@
 .container {
-  border: black solid 5px;
-  background-color: rgba(200, 0, 0, 0.3);
+  border: white solid 5px;
+  // background-color: rgba(255, 238, 0, 0.664);
+  background-image: url("../../assets/hor1.jpeg");
   margin: 0;
   position: absolute;
   top: 80%;
@@ -11,12 +12,45 @@
   //width: fit-content;
 }
 
+@media (max-width: 1000px) {
+  .container {
+    border: white solid 5px;
+    // background-color: rgba(255, 238, 0, 0.664);
+    //background-image: url("../../assets/esc2024bg.png");
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    width: 80%;
+    -ms-transform: translateY(-80%);
+    transform: translateY(-80%);
+    //width: fit-content;
+  }
+}
+
 img {
-  max-width: 95%;
-  max-height: 70%;
+  border: white solid 5px;
+  // max-width: 95%;
+  // max-height: 70%;
+  width: 50%;
   margin: 0;
   position: absolute;
   top: 10%;
+  left: 10%;
+  -ms-transform: translateY(-10%);
+  transform: translateY(-10%);
+  background-color: rgba(80, 80, 80, 0.5);
+}
+
+img:hover {
+  border: white solid 5px;
+  // max-width: 95%;
+  // max-height: 70%;
+  width: 50%;
+  margin: 0;
+  position: absolute;
+  top: 10%;
+  left: 10%;
   -ms-transform: translateY(-10%);
   transform: translateY(-10%);
   background-color: rgba(80, 80, 80, 0.5);
@@ -24,15 +58,15 @@ img {
 }
 
 button {
-  background-image: url("../../assets/black.jpg");
-  border: solid black;
-  color: rgb(117, 133, 126);
+  background-color: black;
+  border: solid white;
+  color: white;
   font-weight: bold;
 }
 
 button:hover {
-  background-image: url("../../assets/black.jpg");
+  background-color: cyan;
   border: solid black;
-  color: rgb(146, 106, 136);
+  color: black;
   font-weight: bold;
 }

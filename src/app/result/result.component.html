@@ -27,12 +27,12 @@
   </div>
 </div> -->
 <div class="row">
-  <div class="col-md-10 mt-5">
+  <div class="col-md-11 mt-5">
     <table
       *ngIf="table"
-      class="table fullres table-sm"
+      class="restable fullres table-sm"
       data-mobile-responsive="true">
-      <thead class="thead-dark">
+      <thead class="header">
         <tr>
           <th style="width: 4%;" scope="col">#</th>
           <th style="width: 25%;" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
@@ -46,7 +46,7 @@
           <th *ngIf="songsOrder[0].points.matija !== 0" style="width: 9%;" class="text-center" scope="col" sortable="matija" (sort)="onSort($event)">Matija</th>
           <th *ngIf="songsOrder[0].points.marko !== 0" style="width: 9%;" class="text-center" scope="col" sortable="marko" (sort)="onSort($event)">Marko</th>
           <th *ngIf="songsOrder[0].points.teco !== 0" style="width: 9%;" class="text-center" scope="col" sortable="teco" (sort)="onSort($event)">Tečo</th> -->
-          <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">Result</th>
+          <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{jury === true ? ' RExp' : 'Result'}}</th>
           <th style="width: 6%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th>
         </tr>
       </thead>
@@ -65,12 +65,14 @@
             </td>
             <ng-container *ngFor="let person of song.votes">
               <td
-              class="text-secondary text-center font-weight-bold align-middle"
+              class="{{setColour(song)}} text-center font-weight-bold align-middle"
               *ngIf="person[1] !== 0">
               <span [ngStyle]="{
                                   'color': color(person[1]),
+                                  'background-color': color(person[1]) === '' ? 'transparent' : 'black',
+                                  'border-radius': color(person[1]) === '' ? '1px' : '50px',
                                   '-webkit-text-stroke-width': color(person[1]) === '' ? '' : '.5px',
-                                  '-webkit-text-stroke-color': 'black'
+                                  '-webkit-text-stroke-color': 'white'
                               }">
                 &nbsp;{{ person[1] | number }}&nbsp;
               </span>
@@ -78,11 +80,11 @@
             </td>
             </ng-container>
             <td
-              class="font-weight-bold text-primary text-center align-middle">
-              {{ song.getTotal() | number}}
+              class="text-success text-bold text-center align-middle">
+              {{ jury === true ? song.getExpWeightTotal() : song.getTotal() | number}}
             </td>
             <td
-              class="align-middle text-secondary text-bold text-center">
+              class="align-middle {{setColour(song)}} text-bold text-center">
               {{ +songsOrder1.indexOf(song) + 1 }}
             </td>
           </tr>
@@ -91,9 +93,9 @@
     </table>
     <table
       *ngIf="!table"
-      class="table res table-sm"
+      class="restable res table-sm"
       data-mobile-responsive="true">
-      <thead class="thead-dark">
+      <thead class="header">
         <tr>
           <th style="width: 4%;" scope="col">#</th>
           <th style="width: 25%;" scope="col">Country</th>
@@ -153,21 +155,29 @@
       <app-loading-spinner></app-loading-spinner>
     </div>
   </div>
-  <div class="col mt-5">
-    <span style="text-align: center;" class="float-right">
-      <button class="btn btn-success ml-3 mb-3" (click)="onVote()">To Voting</button>
-      <button class="btn btn-info ml-3 mb-3" (click)="table = !table;">To Table</button>
-      <br>
-      <button class="btn btn-info ml-3 mb-3" (click)="onStart()" [disabled]="shown === 10">
-      {{ shown === 0 ? 'Start' : isStart ? 'Stop' : 'Continue' }}
-      </button>
-      <button class="btn btn-warning ml-3 mb-3" (click)="shown = 10; isStart=false;" [disabled]="shown === 10">
-        Skip
-      </button>
-      <button class="btn btn-danger ml-3" (click)="onReset()" [disabled]="shown === 0">
-        Reset
-      </button>
-    </span>
+  <div class="col-md-1 mt-5 mr-1">
+    <button class="btn btn-success ml-3 mb-3" (click)="onVote()">To Voting</button>
+    <br>
+    <button class="btn btn-info ml-3 mb-3" (click)="onTable()">
+      {{ table ? 'Go Back' : 'To Table' }}
+    </button>
+    <br>
+    <button class="btn btn-info ml-3 mb-3" (click)="onJury()" [disabled]="!table">
+      {{ jury ? 'Normal' : 'Exp' }}
+    </button>
+    <br>
+    <br>
+    <button class="btn btn-info ml-3 mb-3" (click)="onStart()" [disabled]="shown === 10 || table">
+      {{ isStart ? 'Stop' : shown === 0 ? 'Start' :  'Continue' }}
+    </button>
+    <br>
+    <button class="btn btn-warning ml-3 mb-3" (click)="shown = 10; isStart=false;" [disabled]="shown === 10 || table">
+      Skip
+    </button>
+    <br>
+    <button class="btn btn-danger ml-3" (click)="onReset()" [disabled]="shown === 0 || table">
+      Reset
+    </button>
   </div>
 </div>
 
