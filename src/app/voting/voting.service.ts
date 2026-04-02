@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash-es';
-import { LoginComponent } from '../login/login.component';
 import { EventService } from '../shared/event.service';
 
 export class SongDB {
@@ -10,11 +9,7 @@ export class SongDB {
     public points?: {[key: string]: number}
   ) {
     if(points === undefined) {
-      const tmpPoints: {[key: string]: number} = {};
-      LoginComponent.users.forEach((user): void => {
-        tmpPoints[user] = 0;
-      });
-      this.points = tmpPoints;
+      this.points = {};
     }
   }
 

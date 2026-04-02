@@ -42,12 +42,13 @@ export class VotingComponent implements OnInit {
     this.login = this.loginService.getUser()!;
     this.isLoading = true;
     this.dataStorageService.fetchUserVotes(this.login).subscribe(
-      (votes) => {
+      (existingVotes) => {
         this.isLoading = false;
-        if (votes !== null) {
-          this.toastrService.warning('You have already voted!');
-          this.router.navigate(['/result']);
-          return;
+        if (existingVotes !== null) {
+          this.songs.sort((a, b) =>
+            (existingVotes[a.countryName] ?? 999) - (existingVotes[b.countryName] ?? 999)
+          );
+          this.toastrService.warning('You have already voted — you can update your votes below.');
         }
         this.initForm();
         this.toastrService.info('Drag items in order from first(1) to last(' + this.songs.length + ')');

@@ -1,72 +1,102 @@
-.container {
-  border: white solid 5px;
-  // background-color: rgba(255, 238, 0, 0.664);
-  background-image: url("../../assets/hor1.jpeg");
-  margin: 0;
-  position: absolute;
-  top: 80%;
-  left: 10%;
-  width: 80%;
-  -ms-transform: translateY(-80%);
-  transform: translateY(-80%);
-  //width: fit-content;
+// Vienna Dusk palette
+@bg-card:    rgba(22, 13, 43, 0.95);
+@border:     #D4A017;
+@accent:     #F0C040;
+@text:       #EDE8F5;
+@muted:      rgba(237, 232, 245, 0.5);
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
 }
 
-@media (max-width: 1000px) {
-  .container {
-    border: white solid 5px;
-    // background-color: rgba(255, 238, 0, 0.664);
-    //background-image: url("../../assets/esc2024bg.png");
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 10%;
-    width: 80%;
-    -ms-transform: translateY(-80%);
-    transform: translateY(-80%);
-    //width: fit-content;
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: @bg-card;
+  border: 2px solid @border;
+  border-radius: 4px;
+  padding: 2rem 1.75rem 1.5rem;
+}
+
+.logo-link {
+  display: block;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
   }
 }
 
-img {
-  border: white solid 5px;
-  // max-width: 95%;
-  // max-height: 70%;
-  width: 50%;
-  margin: 0;
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  -ms-transform: translateY(-10%);
-  transform: translateY(-10%);
-  background-color: rgba(80, 80, 80, 0.5);
+.logo-img {
+  width: 100%;
+  max-height: 140px;
+  object-fit: contain;
 }
 
-img:hover {
-  border: white solid 5px;
-  // max-width: 95%;
-  // max-height: 70%;
-  width: 50%;
-  margin: 0;
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  -ms-transform: translateY(-10%);
-  transform: translateY(-10%);
-  background-color: rgba(80, 80, 80, 0.5);
-  opacity: 0.7;
+.name-input {
+  background-color: rgba(10, 6, 24, 0.8);
+  border: 2px solid @border;
+  color: @text;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+  padding: 0.65rem 0.85rem;
+
+  &::placeholder {
+    color: @muted;
+  }
+
+  &:focus {
+    background-color: rgba(10, 6, 24, 0.95);
+    border-color: @accent;
+    color: @text;
+    box-shadow: 0 0 0 0.15rem rgba(212, 160, 23, 0.25);
+    outline: none;
+  }
 }
 
-button {
-  background-color: black;
-  border: solid white;
-  color: white;
+.error-msg {
+  color: #ff8080;
+  font-size: 0.82rem;
+  margin-top: 0.35rem;
+}
+
+.btn-enter {
+  background-color: transparent;
+  border: 2px solid @border;
+  color: @text;
   font-weight: bold;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  padding: 0.6rem;
+  border-radius: 3px;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: @border;
+    border-color: @border;
+    color: #0D0820;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
 }
 
-button:hover {
-  background-color: cyan;
-  border: solid black;
-  color: black;
-  font-weight: bold;
+.admin-link {
+  color: @muted;
+  font-size: 0.8rem;
+  text-decoration: none;
+
+  &:hover {
+    color: @border;
+  }
 }
