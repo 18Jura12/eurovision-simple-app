@@ -1,7 +1,6 @@
 import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { DataStorageService } from '../shared/data-storage.service';
 import { SongDB, VotingService } from '../voting/voting.service';
-import { LoginComponent } from '../login/login.component';
 import * as _ from 'lodash-es';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
@@ -63,11 +62,12 @@ export class ResultComponent implements OnInit, OnDestroy {
     this.dataStorageService.fetchAllVotes().subscribe(
       allVotes => {
         this.isLoading = false;
+        const users = Object.keys(allVotes || {});
         const songList = this.votingService.getSongs();
         for(let song of songList) {
           const points: {[key: string]: number} = {};
-          for(let user of LoginComponent.users) {
-            points[user] = allVotes?.[user]?.[song.countryName] ?? 0;
+          for(let user of users) {
+            points[user] = allVotes![user][song.countryName] ?? 0;
           }
           this.songs.push(new SongDB(song.countryFlag, song.countryName, points));
         }
@@ -75,7 +75,7 @@ export class ResultComponent implements OnInit, OnDestroy {
         this.songsOrder = this.songs.slice();
         this.songsOrder1 = this.songsOrder.slice();
         this.songs = this.sortResults();
-        while(this.songs.length !== 10) {
+        while(this.songs.length > 10) {
           this.songs.pop();
         }
         this.songs = this.shuffle(this.songs);

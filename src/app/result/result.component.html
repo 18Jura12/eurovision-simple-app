@@ -80,7 +80,7 @@
             </td>
             </ng-container>
             <td
-              class="text-success text-bold text-center align-middle">
+              class="{{setColour(song)}} text-bold text-center align-middle">
               {{ jury === true ? song.getExpWeightTotal() : song.getTotal() | number}}
             </td>
             <td
