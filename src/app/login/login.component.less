@@ -1,9 +1,9 @@
-// Vienna Dusk palette
-@bg-card:    rgba(22, 13, 43, 0.95);
-@border:     #D4A017;
-@accent:     #F0C040;
-@text:       #EDE8F5;
-@muted:      rgba(237, 232, 245, 0.5);
+// Vienna 2026 Electric palette
+@bg-card:  rgba(12, 4, 50, 0.92);
+@border:   #0099FF;
+@pink:     #E6007E;
+@text:     #F0EAFA;
+@muted:    rgba(240, 234, 250, 0.5);
 
 .login-page {
   min-height: 100vh;
@@ -15,38 +15,40 @@
 
 .login-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 380px;
   background: @bg-card;
   border: 2px solid @border;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 2rem 1.75rem 1.5rem;
 }
 
 .logo-link {
   display: block;
   text-align: center;
-  margin-bottom: 0.5rem;
-  opacity: 0.9;
+  margin-bottom: 1rem;
+  opacity: 0.95;
   transition: opacity 0.2s;
 
   &:hover {
-    opacity: 0.7;
+    opacity: 0.75;
   }
 }
 
 .logo-img {
-  width: 100%;
-  max-height: 140px;
+  width: 200px;
+  height: 200px;
   object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
 
 .name-input {
-  background-color: rgba(10, 6, 24, 0.8);
-  border: 2px solid @border;
+  background-color: rgba(8, 3, 42, 0.8);
+  border: 1.5px solid @border;
   color: @text;
   font-size: 1.05rem;
   letter-spacing: 0.04em;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 0.65rem 0.85rem;
 
   &::placeholder {
@@ -54,35 +56,35 @@
   }
 
   &:focus {
-    background-color: rgba(10, 6, 24, 0.95);
-    border-color: @accent;
+    background-color: rgba(8, 3, 42, 0.95);
+    border-color: @pink;
     color: @text;
-    box-shadow: 0 0 0 0.15rem rgba(212, 160, 23, 0.25);
+    box-shadow: 0 0 0 0.15rem rgba(230, 0, 126, 0.3);
     outline: none;
   }
 }
 
 .error-msg {
-  color: #ff8080;
+  color: #ff6b9d;
   font-size: 0.82rem;
   margin-top: 0.35rem;
 }
 
 .btn-enter {
   background-color: transparent;
-  border: 2px solid @border;
+  border: 2px solid @pink;
   color: @text;
   font-weight: bold;
   font-size: 1rem;
   letter-spacing: 0.08em;
   padding: 0.6rem;
-  border-radius: 3px;
+  border-radius: 4px;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 
   &:hover:not(:disabled) {
-    background-color: @border;
-    border-color: @border;
-    color: #0D0820;
+    background-color: @pink;
+    border-color: @pink;
+    color: #fff;
   }
 
   &:disabled {

@@ -244,9 +244,9 @@ export class ResultComponent implements OnInit, OnDestroy {
     }
     let style = '';
     if(array.indexOf(song) !== -1 ) {
-      style = 'rgba(255, 215, 0, 0.8)';
+      style = 'rgba(230, 0, 126, 0.22)';
     } else {
-      style = 'rgba(255, 238, 0, 0.1)';
+      style = 'rgba(18, 6, 60, 0.6)';
     }
     return style;
   }

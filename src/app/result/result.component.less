@@ -1,30 +1,27 @@
-// Vienna Dusk palette
-@border:     #D4A017;
-@accent:     #F0C040;
-@text:       #EDE8F5;
-@qualified:  #D4A017;
-@eliminated: #9B8EC4;
-@bg-header:  rgba(13, 8, 32, 0.95);
-@bg-row:     rgba(22, 13, 43, 0.6);
-@bg-qual:    rgba(212, 160, 23, 0.15);
+// Vienna 2026 Electric palette
+@pink:       #E6007E;
+@blue:       #0099FF;
+@text:       #F0EAFA;
+@bg-header:  rgba(12, 4, 50, 0.98);
+@bg-row:     rgba(18, 6, 60, 0.6);
 
 .restable {
-  border: 2px solid @border;
+  border: 2px solid @pink;
   table-layout: fixed;
   background-color: transparent;
   color: @text;
 }
 
 tr {
-  border-top: 1px solid rgba(212, 160, 23, 0.25);
-  border-bottom: 1px solid rgba(212, 160, 23, 0.25);
+  border-top: 1px solid rgba(230, 0, 126, 0.2);
+  border-bottom: 1px solid rgba(230, 0, 126, 0.2);
 }
 
 tbody tr {
   background-color: @bg-row;
 
   &:hover {
-    background-color: rgba(212, 160, 23, 0.08);
+    background-color: rgba(230, 0, 126, 0.06);
   }
 }
 
@@ -50,13 +47,13 @@ tbody tr {
 
 .header {
   background-color: @bg-header;
-  color: @border;
+  color: @pink;
   font-weight: bold;
   letter-spacing: 0.04em;
   font-size: 0.8rem;
 
   th {
-    border-bottom: 2px solid @border;
+    border-bottom: 2px solid @pink;
   }
 }
 
@@ -64,38 +61,37 @@ th {
   word-wrap: break-word;
 }
 
-// Control panel buttons (To Voting, To Table, etc.)
+// Control panel buttons
 button {
   background: transparent;
-  border: 2px solid @border;
+  border: 2px solid @pink;
   color: @text;
   font-weight: bold;
-  border-radius: 3px;
+  border-radius: 4px;
   transition: background-color 0.2s, color 0.2s;
 
   &:hover:not(:disabled) {
-    background-color: @border;
-    color: #0D0820;
-    border-color: @border;
+    background-color: @pink;
+    color: #fff;
+    border-color: @pink;
   }
 
   &:disabled {
-    border-color: rgba(212, 160, 23, 0.3);
-    color: rgba(237, 232, 245, 0.3);
+    border-color: rgba(230, 0, 126, 0.25);
+    color: rgba(240, 234, 250, 0.3);
     cursor: not-allowed;
   }
 }
 
-// Qualified rows (top 10, revealed in animation)
-// These rows always sit on the bright gold placement() background → use dark text
+// Qualified rows — sit on pink glow bg, keep light text for readability
 .tdQ {
-  color: #1A1108;
+  color: @text;
   font-weight: bold;
 }
 
-// Not-yet-revealed or non-qualified rows sit on the dark translucent bg → cream text
+// Not-yet-revealed / non-qualified rows
 .tdNQ {
-  color: @text;
+  color: rgba(240, 234, 250, 0.6);
   font-weight: 600;
 }
 
@@ -119,7 +115,6 @@ button {
     font-size: 1rem;
   }
 
-  // Control buttons column
   .col-md-1 {
     display: flex;
     flex-wrap: wrap;

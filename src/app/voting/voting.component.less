@@ -1,11 +1,9 @@
-// Vienna Dusk palette
-@bg-card:    rgba(22, 13, 43, 0.95);
-@border:     #D4A017;
-@accent:     #F0C040;
-@text:       #EDE8F5;
-@qualified:  #D4A017;
-@eliminated: #9B8EC4;
-@bg-item:    rgba(13, 8, 32, 0.7);
+// Vienna 2026 Electric palette
+@bg-card:    rgba(12, 4, 50, 0.92);
+@pink:       #E6007E;
+@blue:       #0099FF;
+@text:       #F0EAFA;
+@bg-item:    rgba(8, 3, 40, 0.7);
 
 // Suppress number input spinners
 input::-webkit-outer-spin-button,
@@ -22,8 +20,8 @@ input[type="number"] {
   max-width: 520px;
   margin: 1rem auto;
   background: @bg-card;
-  border: 2px solid @border;
-  border-radius: 4px;
+  border: 2px solid @blue;
+  border-radius: 6px;
   padding: 0.75rem;
 
   @media (max-width: 600px) {
@@ -44,8 +42,8 @@ input[type="number"] {
   display: flex;
   align-items: center;
   background: @bg-item;
-  border: 1px solid rgba(212, 160, 23, 0.35);
-  border-radius: 3px;
+  border: 1px solid rgba(0, 153, 255, 0.3);
+  border-radius: 4px;
   margin: 3px 0;
   padding: 0.5rem 0.6rem;
   min-height: 48px;
@@ -58,10 +56,10 @@ input[type="number"] {
 }
 
 .cdk-drag-preview {
-  background: rgba(22, 13, 43, 0.98);
-  border: 2px solid @accent;
-  border-radius: 3px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+  background: rgba(12, 4, 50, 0.98);
+  border: 2px solid @pink;
+  border-radius: 4px;
+  box-shadow: 0 6px 24px rgba(230, 0, 126, 0.3);
   display: flex;
   align-items: center;
   padding: 0.5rem 0.6rem;
@@ -85,7 +83,7 @@ input[type="number"] {
   min-width: 36px;
   background: transparent;
   border: none;
-  color: @border;
+  color: @pink;
   font-weight: bold;
   font-size: 1rem;
   text-align: center;
@@ -109,15 +107,15 @@ input[type="number"] {
 }
 
 .nameQ {
-  color: @qualified;
+  color: @pink;
 }
 
 .nameNQ {
-  color: @eliminated;
+  color: @blue;
 }
 
 .drag-handle {
-  color: rgba(212, 160, 23, 0.5);
+  color: rgba(0, 153, 255, 0.5);
   font-size: 1.4rem;
   padding-left: 0.5rem;
   cursor: grab;
@@ -126,9 +124,9 @@ input[type="number"] {
 }
 
 .qualline {
-  border-top: 2px solid @border;
+  border-top: 2px solid @pink;
   margin: 6px 0;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .vote-footer {
@@ -140,18 +138,18 @@ input[type="number"] {
 
 .btn-vote {
   background: transparent;
-  border: 2px solid @border;
+  border: 2px solid @pink;
   color: @text;
   font-weight: bold;
   font-size: 1rem;
   letter-spacing: 0.08em;
   padding: 0.55rem 2rem;
-  border-radius: 3px;
+  border-radius: 4px;
   transition: background-color 0.2s, color 0.2s;
 
   &:hover:not(:disabled) {
-    background-color: @border;
-    color: #0D0820;
+    background-color: @pink;
+    color: #fff;
   }
 
   &:disabled {

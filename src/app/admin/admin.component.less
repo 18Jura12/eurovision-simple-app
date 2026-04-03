@@ -1,10 +1,12 @@
-// Vienna Dusk palette
-@border:  #D4A017;
-@text:    #EDE8F5;
-@bg-card: rgba(22, 13, 43, 0.85);
+// Vienna 2026 Electric palette
+@pink:    #E6007E;
+@blue:    #0099FF;
+@text:    #F0EAFA;
+@bg-card: rgba(12, 4, 50, 0.92);
 
 .container {
   max-width: 600px;
+  color: @text;
 }
 
 // Password gate overlay
@@ -17,8 +19,8 @@
 
 .gate-card {
   background: @bg-card;
-  border: 2px solid @border;
-  border-radius: 10px;
+  border: 2px solid @blue;
+  border-radius: 8px;
   padding: 2rem;
   width: 100%;
   max-width: 320px;
@@ -26,25 +28,25 @@
   color: @text;
 
   h5 {
-    color: @border;
+    color: @blue;
     font-weight: bold;
     letter-spacing: 0.04em;
   }
 
   .form-control {
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid @border;
+    background: rgba(8, 3, 42, 0.8);
+    border: 1.5px solid @blue;
     color: @text;
     text-align: center;
 
     &::placeholder {
-      color: rgba(237, 232, 245, 0.4);
+      color: rgba(240, 234, 250, 0.4);
     }
 
     &:focus {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: @border;
-      box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.25);
+      background: rgba(8, 3, 42, 0.95);
+      border-color: @pink;
+      box-shadow: 0 0 0 2px rgba(230, 0, 126, 0.3);
       color: @text;
       outline: none;
     }
@@ -52,21 +54,43 @@
 
   .btn-enter {
     background: transparent;
-    border: 2px solid @border;
+    border: 2px solid @pink;
     color: @text;
     font-weight: bold;
-    border-radius: 3px;
+    border-radius: 4px;
     transition: background-color 0.2s, color 0.2s;
 
     &:hover {
-      background-color: @border;
-      color: #0D0820;
+      background-color: @pink;
+      color: #fff;
     }
   }
 }
 
 .error-msg {
-  color: #ff6b6b;
+  color: #ff6b9d;
   font-size: 0.85rem;
   margin-top: 0.5rem;
+}
+
+// Catalog buttons
+.btn-outline-secondary {
+  background: transparent;
+  border: 1.5px solid @blue;
+  color: @text;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: rgba(0, 153, 255, 0.15);
+    color: @text;
+    border-color: @blue;
+  }
+}
+
+.btn-success {
+  background: rgba(230, 0, 126, 0.2);
+  border: 2px solid @pink;
+  color: @text;
+  border-radius: 4px;
 }
