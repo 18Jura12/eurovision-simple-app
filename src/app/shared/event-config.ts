@@ -7,24 +7,23 @@ export interface EventConfig {
 }
 
 export const ACTIVE_EVENT: EventConfig = {
-  year: 2025,
-  event: 'SF2',
+  year: 2026,
+  event: 'SF1',
   countries: [
-    'Australia',
-    'Montenegro',
-    'Republic of Ireland',
-    'Latvia',
-    'Armenia',
-    'Austria',
+    'Moldova',
+    'Sweden',
+    'Croatia',
     'Greece',
-    'Lithuania',
-    'Malta',
+    'Portugal',
     'Georgia',
-    'Denmark',
-    'Czechia',
-    'Luxembourg',
+    'Finland',
+    'Montenegro',
+    'Estonia',
     'Israel',
-    'Serbia',
-    'Finland'
+    'Belgium',
+    'Lithuania',
+    'San Marino',
+    'Poland',
+    'Serbia'
   ]
 };

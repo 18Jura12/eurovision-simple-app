@@ -31,4 +31,8 @@ export class DataStorageService {
     return this.http.get<any>(`${DB}/catalog.json`);
   }
 
+  fetchAdminPasswordHash(): Observable<string | null> {
+    return this.http.get<string | null>(`${DB}/config/adminPasswordHash.json`);
+  }
+
 }

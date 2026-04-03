@@ -1,3 +1,72 @@
+// Vienna Dusk palette
+@border:  #D4A017;
+@text:    #EDE8F5;
+@bg-card: rgba(22, 13, 43, 0.85);
+
 .container {
   max-width: 600px;
+}
+
+// Password gate overlay
+.admin-gate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.gate-card {
+  background: @bg-card;
+  border: 2px solid @border;
+  border-radius: 10px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  color: @text;
+
+  h5 {
+    color: @border;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+  }
+
+  .form-control {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid @border;
+    color: @text;
+    text-align: center;
+
+    &::placeholder {
+      color: rgba(237, 232, 245, 0.4);
+    }
+
+    &:focus {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: @border;
+      box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.25);
+      color: @text;
+      outline: none;
+    }
+  }
+
+  .btn-enter {
+    background: transparent;
+    border: 2px solid @border;
+    color: @text;
+    font-weight: bold;
+    border-radius: 3px;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover {
+      background-color: @border;
+      color: #0D0820;
+    }
+  }
+}
+
+.error-msg {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
 }

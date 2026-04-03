@@ -1,4 +1,19 @@
-<div class="container mt-4">
+<div *ngIf="!isAuthenticated" class="admin-gate">
+  <form class="gate-card" (ngSubmit)="checkPassword()">
+    <h5 class="mb-3">Admin Access</h5>
+    <input
+      type="password"
+      [(ngModel)]="passwordInput"
+      name="pwd"
+      placeholder="Password"
+      class="form-control"
+      autofocus>
+    <div class="error-msg" *ngIf="passwordError">Incorrect password.</div>
+    <button type="submit" class="btn btn-enter w-100 mt-3">Enter</button>
+  </form>
+</div>
+
+<div *ngIf="isAuthenticated" class="container mt-4">
   <h4 class="mb-4">Select Active Event</h4>
 
   <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>

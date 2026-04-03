@@ -13,6 +13,11 @@ export class AdminComponent implements OnInit {
   isLoading = false;
   activeEvent: EventConfig;
 
+  isAuthenticated = false;
+  passwordInput = '';
+  passwordError = false;
+  private passwordHash: string | null = null;
+
   constructor(
     private dataStorageService: DataStorageService,
     private eventService: EventService
@@ -21,6 +26,28 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAuthenticated = sessionStorage.getItem('admin_authed') === 'true';
+    this.dataStorageService.fetchAdminPasswordHash().subscribe(h => this.passwordHash = h);
+    if (this.isAuthenticated) {
+      this.loadCatalog();
+    }
+  }
+
+  async checkPassword(): Promise<void> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(this.passwordInput);
+    const buf = await crypto.subtle.digest('SHA-256', data);
+    const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    if (hex === this.passwordHash) {
+      sessionStorage.setItem('admin_authed', 'true');
+      this.isAuthenticated = true;
+      this.loadCatalog();
+    } else {
+      this.passwordError = true;
+    }
+  }
+
+  private loadCatalog(): void {
     this.isLoading = true;
     this.dataStorageService.fetchCatalog().subscribe(data => {
       this.isLoading = false;
