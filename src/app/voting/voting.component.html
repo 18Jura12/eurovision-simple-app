@@ -14,13 +14,16 @@
           <span [ngClass]="setClass(i) + ' country-name'">{{ getSongDetails(i).countryName }}</span>
           <span class="drag-handle">&#8942;</span>
         </div>
-        <div class="qualline" *ngIf="i === 9"></div>
+        <div class="qualline" *ngIf="i === 9 && !isFinal"></div>
       </div>
     </div>
 
     <div class="vote-footer">
       <button class="btn btn-vote" type="submit" [disabled]="voteForm.invalid || isLoading">
-        Vote
+        {{ hasVoted ? 'Update' : 'Vote' }}
+      </button>
+      <button *ngIf="hasVoted" class="btn btn-cancel" type="button" (click)="onCancel()">
+        Cancel
       </button>
       <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
     </div>

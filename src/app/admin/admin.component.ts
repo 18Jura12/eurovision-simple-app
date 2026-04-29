@@ -68,13 +68,34 @@ export class AdminComponent implements OnInit {
     return this.catalog[year]?.[event]?.countries || [];
   }
 
+  getAllSongsCountries(year: string): string[] {
+    const events = this.catalog[year] || {};
+    const all = new Set<string>();
+    for (const event of Object.values(events)) {
+      for (const country of event.countries || []) {
+        all.add(country);
+      }
+    }
+    return Array.from(all).sort();
+  }
+
   isActive(year: string, event: string): boolean {
     return this.activeEvent.year === +year && this.activeEvent.event === (event as EventType);
+  }
+
+  isActiveAllSongs(year: string): boolean {
+    return this.activeEvent.year === +year && this.activeEvent.event === 'AllSongs';
   }
 
   selectEvent(year: string, event: string): void {
     const countries = this.getCountries(year, event);
     this.eventService.setActive({ year: +year, event: event as EventType, countries });
+    window.location.href = '/login';
+  }
+
+  selectAllSongs(year: string): void {
+    const countries = this.getAllSongsCountries(year);
+    this.eventService.setActive({ year: +year, event: 'AllSongs', countries });
     window.location.href = '/login';
   }
 }

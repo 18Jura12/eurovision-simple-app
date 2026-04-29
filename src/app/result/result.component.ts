@@ -59,7 +59,8 @@ export class ResultComponent implements OnInit, OnDestroy {
     private router: Router,
     private eventService: EventService
   ) {
-    this.isFinal = this.eventService.getActive().event === 'Final';
+    const event = this.eventService.getActive().event;
+    this.isFinal = event === 'Final' || event === 'AllSongs';
   }
 
   ngOnInit(): void {
@@ -229,23 +230,27 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   placement(song: SongDB) {
+    if (this.isFinal) {
+      const rank = this.sortResults().indexOf(song);
+      if (rank === 0) return 'rgba(255, 215, 0, 0.85)';
+      if (rank === 1) return 'rgba(220, 220, 220, 0.85)';
+      if (rank === 2) return 'rgba(195, 137, 60, 0.75)';
+      if (rank < 10) return 'rgba(255, 215, 0, 0.15)';
+      return 'rgba(18, 6, 60, 0.6)';
+    }
     let array = this.songs.slice();
     while(array.length !== this.shown) {
       array.pop();
     }
-    let style = '';
-    if(array.indexOf(song) !== -1 ) {
-      style = 'rgba(230, 0, 126, 0.22)';
-    } else {
-      style = 'rgba(18, 6, 60, 0.6)';
-    }
-    return style;
+    return array.indexOf(song) !== -1 ? 'rgba(230, 0, 126, 0.22)' : 'rgba(18, 6, 60, 0.6)';
   }
 
   setColour(song: SongDB) {
     if (this.isFinal) {
-      const top3 = this.sortResults().slice(0, 3);
-      return top3.indexOf(song) !== -1 ? 'tdQ' : 'tdNQ';
+      const rank = this.sortResults().indexOf(song);
+      if (rank < 3) return 'tdQMedal';
+      if (rank < 10) return 'tdQ';
+      return 'tdNQ';
     }
     let array = this.songs.slice();
     while(array.length !== this.shown) {
@@ -343,6 +348,8 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.sub.unsubscribe();
       this.isStart = false;
     }
+    this.songsOrder = this.sortResults();
+    this.headers.forEach(h => h.direction = '');
     this.shown = this.isFinal ? this.songs.length : 0;
   }
 

@@ -154,16 +154,18 @@ async function scrapeEvent(year, eventName, urlSuffix) {
   process.stdout.write(`  ${year} ${eventName} ... `);
   try {
     const jsId = await getVotingJsId(year, urlSuffix);
-    if (!jsId) { console.log('no voting JS found'); return; }
+    if (!jsId) { console.log('no voting JS found'); return null; }
 
     const countries = await getCountriesFromVotingJs(jsId);
-    if (!countries.length) { console.log('no countries found'); return; }
+    if (!countries.length) { console.log('no countries found'); return null; }
 
     await putToFirebase(`/catalog/${year}/${eventName}.json`, { countries });
     console.log(`${countries.length} countries saved`);
     await sleep(800);
+    return countries;
   } catch (e) {
     console.log(`error: ${e.message}`);
+    return null;
   }
 }
 
@@ -172,14 +174,27 @@ async function main() {
   console.log(`Scraping Eurovision ${2000}–${currentYear}\n`);
 
   for (let year = 2000; year <= currentYear; year++) {
+    const allForYear = new Set();
+
     // Semi-finals: single SF from 2004–2007, two SFs from 2008 onward
     if (year >= 2008) {
-      await scrapeEvent(year, 'SF1', '/semi-final-1');
-      await scrapeEvent(year, 'SF2', '/semi-final-2');
+      const sf1 = await scrapeEvent(year, 'SF1', '/semi-final-1');
+      const sf2 = await scrapeEvent(year, 'SF2', '/semi-final-2');
+      (sf1 || []).forEach(c => allForYear.add(c));
+      (sf2 || []).forEach(c => allForYear.add(c));
     } else if (year >= 2004) {
-      await scrapeEvent(year, 'SF1', '/semi-final');
+      const sf1 = await scrapeEvent(year, 'SF1', '/semi-final');
+      (sf1 || []).forEach(c => allForYear.add(c));
     }
-    await scrapeEvent(year, 'Final', '');
+    const final = await scrapeEvent(year, 'Final', '');
+    (final || []).forEach(c => allForYear.add(c));
+
+    if (allForYear.size > 0) {
+      process.stdout.write(`  ${year} AllSongs ... `);
+      const sorted = Array.from(allForYear).sort();
+      await putToFirebase(`/catalog/${year}/AllSongs.json`, { countries: sorted });
+      console.log(`${sorted.length} countries saved`);
+    }
   }
 
   console.log('\nDone!');

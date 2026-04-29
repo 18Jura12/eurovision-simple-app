@@ -8,6 +8,7 @@ import { SongDB, VotingService } from './voting.service';
 import * as _ from 'lodash-es';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from '../login/login.service';
+import { EventService } from '../shared/event.service';
 
 export class Song {
   constructor(
@@ -25,6 +26,8 @@ export class VotingComponent implements OnInit {
   login!: string;
   isLoading = false;
   voteForm!: UntypedFormGroup;
+  isFinal: boolean;
+  hasVoted = false;
 
   songs: SongDB[];
 
@@ -33,9 +36,12 @@ export class VotingComponent implements OnInit {
     private toastrService: ToastrService,
     votingService: VotingService,
     private dataStorageService: DataStorageService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    eventService: EventService
   ) {
     this.songs = votingService.getSongs();
+    const event = eventService.getActive().event;
+    this.isFinal = event === 'Final' || event === 'AllSongs';
   }
 
   ngOnInit(): void {
@@ -45,6 +51,7 @@ export class VotingComponent implements OnInit {
       (existingVotes) => {
         this.isLoading = false;
         if (existingVotes !== null) {
+          this.hasVoted = true;
           this.songs.sort((a, b) =>
             (existingVotes[a.countryName] ?? 999) - (existingVotes[b.countryName] ?? 999)
           );
@@ -93,6 +100,10 @@ export class VotingComponent implements OnInit {
     );
   }
 
+  onCancel() {
+    this.router.navigate(['/result']);
+  }
+
   get songControls() {
     return (this.voteForm.get('votes') as UntypedFormArray).controls;
   }
@@ -109,6 +120,12 @@ export class VotingComponent implements OnInit {
   }
 
   setClass(i: number): string {
+    if (this.isFinal) {
+      if (i === 0) return 'name1st';
+      if (i === 1) return 'name2nd';
+      if (i === 2) return 'name3rd';
+      return i < 10 ? 'nameQFinal' : 'nameNQ';
+    }
     return i < 10 ? 'nameQ' : 'nameNQ';
   }
 

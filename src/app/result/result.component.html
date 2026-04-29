@@ -1,5 +1,6 @@
 <!-- Final night view -->
 <ng-container *ngIf="isFinal">
+<div class="container-fluid px-3">
   <div class="row">
     <div class="col-md-11 mt-5">
       <table
@@ -21,7 +22,7 @@
           <ng-container *ngFor="let song of songsOrder; let i = index">
             <tr
               *ngIf="shown <= i"
-              [ngStyle]="{'background-color': 'rgba(230, 0, 126, 0.22)'}">
+              [ngStyle]="{'background-color': placement(song)}">
               <td class="{{setColour(song)}} align-middle font-weight-bold">
                 {{ sortResults().indexOf(song) + 1 }}
               </td>
@@ -82,10 +83,12 @@
       </button>
     </div>
   </div>
+</div>
 </ng-container>
 
 <!-- SF1 / SF2 view -->
 <ng-container *ngIf="!isFinal">
+<div class="container-fluid px-3">
   <div class="row">
     <div class="col-md-11 mt-5">
       <table
@@ -202,4 +205,5 @@
       </button>
     </div>
   </div>
+</div>
 </ng-container>

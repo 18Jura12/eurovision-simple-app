@@ -35,6 +35,16 @@
         <span class="badge bg-light text-dark ms-2">{{ getCountries(year, event).length }}</span>
         <span *ngIf="isActive(year, event)" class="ms-1">✓</span>
       </button>
+      <button
+        *ngIf="getAllSongsCountries(year).length > 0"
+        class="btn"
+        [class.btn-success]="isActiveAllSongs(year)"
+        [class.btn-outline-secondary]="!isActiveAllSongs(year)"
+        (click)="selectAllSongs(year)">
+        All Songs
+        <span class="badge bg-light text-dark ms-2">{{ getAllSongsCountries(year).length }}</span>
+        <span *ngIf="isActiveAllSongs(year)" class="ms-1">✓</span>
+      </button>
     </div>
   </div>
 </div>

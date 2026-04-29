@@ -114,6 +114,27 @@ input[type="number"] {
   color: @blue;
 }
 
+.name1st {
+  color: #FFD700;
+  font-weight: bold;
+}
+
+.name2nd {
+  color: rgb(220, 220, 220);
+  font-weight: bold;
+}
+
+.name3rd {
+  color: #CD7F32;
+  font-weight: bold;
+}
+
+.nameQFinal {
+  color: #FFD700;
+  opacity: 0.55;
+  font-weight: 600;
+}
+
 .drag-handle {
   color: rgba(0, 153, 255, 0.5);
   font-size: 1.4rem;
@@ -155,5 +176,22 @@ input[type="number"] {
   &:disabled {
     opacity: 0.35;
     cursor: not-allowed;
+  }
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 2px solid @blue;
+  color: @text;
+  font-weight: bold;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  padding: 0.55rem 2rem;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: @blue;
+    color: #fff;
   }
 }
