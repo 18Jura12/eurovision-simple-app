@@ -4,6 +4,7 @@ import { SongDB, VotingService } from '../voting/voting.service';
 import * as _ from 'lodash-es';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
+import { EventService } from '../shared/event.service';
 
 export type SortColumn = string;
 export type SortDirection = 'asc' | 'desc' | '';
@@ -50,12 +51,16 @@ export class ResultComponent implements OnInit, OnDestroy {
   sub!: Subscription;
   source = interval(5000);
   table: boolean = false;
+  isFinal: boolean;
 
   constructor(
     private votingService: VotingService,
     private dataStorageService: DataStorageService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private eventService: EventService
+  ) {
+    this.isFinal = this.eventService.getActive().event === 'Final';
+  }
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -75,10 +80,18 @@ export class ResultComponent implements OnInit, OnDestroy {
         this.songsOrder = this.songs.slice();
         this.songsOrder1 = this.songsOrder.slice();
         this.songs = this.sortResults();
-        while(this.songs.length > 10) {
-          this.songs.pop();
+
+        if (this.isFinal) {
+          // All countries, sorted, no shuffle — countdown from full count
+          this._shown = this.songs.length;
+          this.source = interval(2000);
+        } else {
+          // SF: top 10 shuffled, count up from 0
+          while(this.songs.length > 10) {
+            this.songs.pop();
+          }
+          this.songs = this.shuffle(this.songs);
         }
-        this.songs = this.shuffle(this.songs);
       }
     );
   }
@@ -86,17 +99,12 @@ export class ResultComponent implements OnInit, OnDestroy {
   @ViewChildren(NgbdSortableHeader) headers!: QueryList<NgbdSortableHeader>;
 
   onSort({column, direction}: SortEvent) {
-
-    //console.log(column + direction);
-    // resetting other headers
     this.headers.forEach(header => {
-      //console.log(header);
       if (header.sortable !== column) {
         header.direction = '';
       }
     });
 
-    // sorting countries
     if (direction === '' || column === '') {
       this.songsOrder = this.sortResults();
     } else if(column === 'order'){
@@ -109,9 +117,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.songsOrder = _.orderBy(
         this.songsOrder,
         [
-          // first sort by points
           item => item.getTotal(),
-          // then sort by the highest place given
           item => {
             let array = _.toArray(item.points);
             while(_.findIndex(array, e => e === 0) !== -1) {
@@ -119,19 +125,15 @@ export class ResultComponent implements OnInit, OnDestroy {
             }
             return _.min(array);
           },
-          //then sort by the highest amount of highest place given
           item => {
             let array = _.toArray(item.points);
-            console.log(array);
             while(array.indexOf(0) !== -1) {
               array.splice(array.indexOf(0), 1);
             }
             return  _.countBy(array)[_.min(array)!.toString()];
           },
-          //then sort by the second highest place given
           item => {
             let array = _.toArray(item.points);
-            console.log(array);
             while(array.indexOf(0) !== -1) {
               array.splice(array.indexOf(0), 1);
             }
@@ -141,10 +143,8 @@ export class ResultComponent implements OnInit, OnDestroy {
             }
             return array.length ? _.min(array) : 0;
           },
-          //then sort by the highest amount of second highest place given
           item => {
             let array = _.toArray(item.points);
-            console.log(array);
             while(array.indexOf(0) !== -1) {
               array.splice(array.indexOf(0), 1);
             }
@@ -174,7 +174,6 @@ export class ResultComponent implements OnInit, OnDestroy {
         item => item.getTotal(),
         item => {
           let array = _.toArray(item.points);
-          console.log(array);
           while(_.findIndex(array, e => e === 0) !== -1) {
             array.splice(array.indexOf(0), 1);
           }
@@ -182,7 +181,6 @@ export class ResultComponent implements OnInit, OnDestroy {
         },
         item => {
           let array = _.toArray(item.points);
-          console.log(array);
           while(array.indexOf(0) !== -1) {
             array.splice(array.indexOf(0), 1);
           }
@@ -190,7 +188,6 @@ export class ResultComponent implements OnInit, OnDestroy {
         },
         item => {
           let array = _.toArray(item.points);
-          console.log(array);
           while(array.indexOf(0) !== -1) {
             array.splice(array.indexOf(0), 1);
           }
@@ -202,7 +199,6 @@ export class ResultComponent implements OnInit, OnDestroy {
         },
         item => {
           let array = _.toArray(item.points);
-          console.log(array);
           while(array.indexOf(0) !== -1) {
             array.splice(array.indexOf(0), 1);
           }
@@ -221,14 +217,9 @@ export class ResultComponent implements OnInit, OnDestroy {
     var temporaryValue: SongDB;
     var randomIndex: number;
 
-    // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-
-      // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
-
-      // And swap it with the current element.
       temporaryValue = array[currentIndex];
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
@@ -252,29 +243,23 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   setColour(song: SongDB) {
+    if (this.isFinal) {
+      const top3 = this.sortResults().slice(0, 3);
+      return top3.indexOf(song) !== -1 ? 'tdQ' : 'tdNQ';
+    }
     let array = this.songs.slice();
     while(array.length !== this.shown) {
       array.pop();
     }
-    let style = '';
-    if(array.indexOf(song) !== -1 ) {
-      style = 'tdQ';
-    } else {
-      style = 'tdNQ';
-    }
-    return style;
+    return array.indexOf(song) !== -1 ? 'tdQ' : 'tdNQ';
   }
 
   color(vote: number): string {
-    let style = '';
-    if(vote === 1) {
-      style = 'gold';
-    } else if(vote === 2) {
-      style = 'rgb(250, 250, 250)';
-    } else if(vote === 3) {
-      style = '#CD7F32';
-    }
-    return style;
+    if(vote === 1) return 'gold';
+    if(vote === 2) return 'rgb(250, 250, 250)';
+    if(vote === 3) return '#CD7F32';
+    if(this.isFinal && vote <= 10) return '#0099FF';
+    return '';
   }
 
   onVote() {
@@ -287,11 +272,12 @@ export class ResultComponent implements OnInit, OnDestroy {
     }
     this.isStart = !this.isStart;
     if(this.isStart) {
-      this.sub = this.source.subscribe(
-        val => {
-          this.shown++;
-        }
-      );
+      if (this.isFinal) {
+        this.shown--;
+        this.sub = this.source.subscribe(_ => { this.shown--; });
+      } else {
+        this.sub = this.source.subscribe(_ => { this.shown++; });
+      }
     }
   }
 
@@ -302,29 +288,52 @@ export class ResultComponent implements OnInit, OnDestroy {
   set shown(value: number) {
     if(value !== this._shown) {
       this._shown = value;
-      switch(value) {
-        case 5:
-          this.source = interval(8000);
-          this.sub.unsubscribe();
-          this.sub = this.source.subscribe(
-            val => {this.shown++;});
-          break;
-        case 7:
-          this.source = interval(10000);
-          this.sub.unsubscribe();
-          this.sub = this.source.subscribe(
-            val => {this.shown++;});
-          break;
-        case 9:
-          this.source = interval(15000);
-          this.sub.unsubscribe();
-          this.sub = this.source.subscribe(
-            val => { this.shown++; });
-          break;
-        case 10:
-          if(this.sub) {
+      if (this.isFinal) {
+        switch(value) {
+          case 15:
+            this.source = interval(5000);
             this.sub.unsubscribe();
-          }
+            this.sub = this.source.subscribe(_ => { this.shown--; });
+            break;
+          case 10:
+            this.source = interval(10000);
+            this.sub.unsubscribe();
+            this.sub = this.source.subscribe(_ => { this.shown--; });
+            break;
+          case 5:
+            this.source = interval(15000);
+            this.sub.unsubscribe();
+            this.sub = this.source.subscribe(_ => { this.shown--; });
+            break;
+          case 1:
+            this.source = interval(1000);
+            this.sub.unsubscribe();
+            this.sub = this.source.subscribe(_ => { this.shown--; });
+            break;
+          case 0:
+            if(this.sub) { this.sub.unsubscribe(); }
+            this.isStart = false;
+        }
+      } else {
+        switch(value) {
+          case 5:
+            this.source = interval(8000);
+            this.sub.unsubscribe();
+            this.sub = this.source.subscribe(_ => {this.shown++;});
+            break;
+          case 7:
+            this.source = interval(10000);
+            this.sub.unsubscribe();
+            this.sub = this.source.subscribe(_ => {this.shown++;});
+            break;
+          case 9:
+            this.source = interval(15000);
+            this.sub.unsubscribe();
+            this.sub = this.source.subscribe(_ => { this.shown++; });
+            break;
+          case 10:
+            if(this.sub) { this.sub.unsubscribe(); }
+        }
       }
     }
   }
@@ -334,7 +343,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.sub.unsubscribe();
       this.isStart = false;
     }
-    this.shown = 0;
+    this.shown = this.isFinal ? this.songs.length : 0;
   }
 
   onTable() {
@@ -345,7 +354,12 @@ export class ResultComponent implements OnInit, OnDestroy {
 
   onJury() {
     this.jury = !this.jury;
-    this.songs = this.sortResults();
+    if (this.isFinal) {
+      this.songsOrder = this.sortResults();
+      this.songs = this.songsOrder.slice();
+    } else {
+      this.songs = this.sortResults();
+    }
   }
 
   allVoted(): boolean {

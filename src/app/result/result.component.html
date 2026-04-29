@@ -1,183 +1,205 @@
-<!-- <div class="row">
-  <div
-    class="flex-col col-md-12"
-    *ngFor="let song of sortResults(); let i = index;">
-    <div class="btn-group m-2 p-1">
-      <button class="btn btn-outline-secondary">
-        <span [ngClass]="'h3 flag-icon flag-icon-'+ song.countryFlag"></span>
-      </button>
-      <button class="btn btn-outline-info px-3">
-        <div class="row">
-          <div class="col-xs-12">
-            <table class="table table-bordered table-sm mr-1 mb-n1">
-              <tr>
+<!-- Final night view -->
+<ng-container *ngIf="isFinal">
+  <div class="row">
+    <div class="col-md-11 mt-5">
+      <table
+        *ngIf="songsOrder.length > 0"
+        class="restable fullres table-sm"
+        data-mobile-responsive="true">
+        <thead class="header">
+          <tr>
+            <th style="width: 4%;" scope="col">#</th>
+            <th style="width: 25%;" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
+            <ng-container *ngFor="let person of songsOrder[0].votes">
+              <th *ngIf="person[1] !== 0" style="width: 9%;" class="text-center" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
+            </ng-container>
+            <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{jury === true ? 'RExp' : 'Result'}}</th>
+            <th style="width: 6%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th>
+          </tr>
+        </thead>
+        <tbody class="over">
+          <ng-container *ngFor="let song of songsOrder; let i = index">
+            <tr
+              *ngIf="shown <= i"
+              [ngStyle]="{'background-color': 'rgba(230, 0, 126, 0.22)'}">
+              <td class="{{setColour(song)}} align-middle font-weight-bold">
+                {{ sortResults().indexOf(song) + 1 }}
+              </td>
+              <td class="align-middle">
+                <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+                <span class="{{setColour(song)}} h5"> {{ song.countryName }}</span>
+              </td>
+              <ng-container *ngFor="let person of song.votes">
                 <td
-                  *ngFor="let person of song.votes">
-                        {{ person[0] }}: {{person[1] < 10 ? ('0' + person[1]) : person[1]}}
+                  class="{{setColour(song)}} text-center font-weight-bold align-middle"
+                  *ngIf="person[1] !== 0">
+                  <span [ngStyle]="{
+                    'color': color(person[1]),
+                    'background-color': color(person[1]) !== '' && color(person[1]) !== '#0099FF' ? 'black' : 'transparent',
+                    'border-radius': color(person[1]) !== '' && color(person[1]) !== '#0099FF' ? '50px' : '1px',
+                    '-webkit-text-stroke-width': color(person[1]) !== '' && color(person[1]) !== '#0099FF' ? '.5px' : '',
+                    '-webkit-text-stroke-color': 'white'
+                  }">
+                    &nbsp;{{ person[1] | number }}&nbsp;
+                  </span>
                 </td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </button>
-      <button class="btn btn-outline-info">
-        <span class="h4"> result: {{ song.getTotal() }} </span>
-      </button>
-    </div>
-  </div>
-</div> -->
-<div class="row">
-  <div class="col-md-11 mt-5">
-    <table
-      *ngIf="table"
-      class="restable fullres table-sm"
-      data-mobile-responsive="true">
-      <thead class="header">
-        <tr>
-          <th style="width: 4%;" scope="col">#</th>
-          <th style="width: 25%;" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
-          <ng-container *ngFor="let person of songsOrder[0].votes">
-            <th *ngIf="person[1] !== 0" style="width: 9%;" class="text-center" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
+              </ng-container>
+              <td class="{{setColour(song)}} text-center align-middle" style="font-size: 20px;">
+                {{ jury === true ? song.getExpWeightTotal() : song.getTotal() | number }}
+              </td>
+              <td class="align-middle {{setColour(song)}} text-bold text-center">
+                {{ +songsOrder1.indexOf(song) + 1 }}
+              </td>
+            </tr>
           </ng-container>
-          <!-- <th *ngIf="songsOrder[0].points.johnny !== 0" style="width: 9%;" class="text-center" scope="col" sortable="johnny" (sort)="onSort($event)">Johnny</th>
-          <th *ngIf="songsOrder[0].points.juco !== 0" style="width: 9%;" class="text-center" scope="col" sortable="juco" (sort)="onSort($event)">Jučo</th>
-          <th *ngIf="songsOrder[0].points.nika !== 0" style="width: 9%;" class="text-center" scope="col" sortable="nika" (sort)="onSort($event)">Nika</th>
-          <th *ngIf="songsOrder[0].points.lucija !== 0" style="width: 9%;" class="text-center" scope="col" sortable="lucija" (sort)="onSort($event)">Lucija</th>
-          <th *ngIf="songsOrder[0].points.matija !== 0" style="width: 9%;" class="text-center" scope="col" sortable="matija" (sort)="onSort($event)">Matija</th>
-          <th *ngIf="songsOrder[0].points.marko !== 0" style="width: 9%;" class="text-center" scope="col" sortable="marko" (sort)="onSort($event)">Marko</th>
-          <th *ngIf="songsOrder[0].points.teco !== 0" style="width: 9%;" class="text-center" scope="col" sortable="teco" (sort)="onSort($event)">Tečo</th> -->
-          <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{jury === true ? ' RExp' : 'Result'}}</th>
-          <th style="width: 6%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th>
-        </tr>
-      </thead>
-      <tbody class="over">
-        <ng-container *ngFor="let song of songsOrder; let i = index">
-          <tr
-            [ngStyle]="{'background-color': placement(song)}">
-            <td
-              class="{{setColour(song)}} align-middle font-weight-bold">
-              {{ +i + 1 }}
-            </td>
-            <td
-              class="align-middle">
-              <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
-              <span class="{{setColour(song)}} h5"> {{ song.countryName }}</span>
-            </td>
-            <ng-container *ngFor="let person of song.votes">
-              <td
-              class="{{setColour(song)}} text-center font-weight-bold align-middle"
-              *ngIf="person[1] !== 0">
-              <span [ngStyle]="{
-                                  'color': color(person[1]),
-                                  'background-color': color(person[1]) === '' ? 'transparent' : 'black',
-                                  'border-radius': color(person[1]) === '' ? '1px' : '50px',
-                                  '-webkit-text-stroke-width': color(person[1]) === '' ? '' : '.5px',
-                                  '-webkit-text-stroke-color': 'white'
-                              }">
-                &nbsp;{{ person[1] | number }}&nbsp;
-              </span>
-              <!-- {{person[1] < 10 ? ('0' + person[1]) : person[1] | number}} -->
-            </td>
-            </ng-container>
-            <td
-              class="{{setColour(song)}} text-bold text-center align-middle">
-              {{ jury === true ? song.getExpWeightTotal() : song.getTotal() | number}}
-            </td>
-            <td
-              class="align-middle {{setColour(song)}} text-bold text-center">
-              {{ +songsOrder1.indexOf(song) + 1 }}
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-    <table
-      *ngIf="!table"
-      class="restable res table-sm"
-      data-mobile-responsive="true">
-      <thead class="header">
-        <tr>
-          <th style="width: 4%;" scope="col">#</th>
-          <th style="width: 25%;" scope="col">Country</th>
-          <!-- <th *ngIf="songs[0].points.johnny !== 0" style="width: 9%;" class="text-center" scope="col" sortable="johnny" (sort)="onSort($event)">Johnny</th>
-          <th *ngIf="songs[0].points.juco !== 0" style="width: 9%;" class="text-center" scope="col" sortable="juco" (sort)="onSort($event)">Jučo</th>
-          <th *ngIf="songs[0].points.nika !== 0" style="width: 9%;" class="text-center" scope="col" sortable="nika" (sort)="onSort($event)">Nika</th>
-          <th *ngIf="songs[0].points.matija !== 0" style="width: 9%;" class="text-center" scope="col" sortable="matija" (sort)="onSort($event)">Matija</th>
-          <th *ngIf="songs[0].points.marko !== 0" style="width: 9%;" class="text-center" scope="col" sortable="marko" (sort)="onSort($event)">Marko</th>
-          <th *ngIf="songs[0].points.teco !== 0" style="width: 9%;" class="text-center" scope="col" sortable="teco" (sort)="onSort($event)">Tečo</th>
-          <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">Result</th>
-          <th style="width: 6%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th> -->
-        </tr>
-      </thead>
-      <tbody class="over">
-        <ng-container *ngFor="let song of songsOrder; let i = index">
-          <tr
-            [ngStyle]="{'background-color': placement(song)}">
-            <td
-              class="{{setColour(song)}} align-middle font-weight-bold">
-              {{ +i + 1 }}
-            </td>
-            <td
-              class="align-middle">
-              <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
-              <span class="h5 {{setColour(song)}}"> {{ song.countryName }}</span>
-            </td>
-            <!-- <ng-container *ngFor="let person of song.votes">
-              <td
-              class="text-secondary text-center font-weight-bold align-middle"
-              *ngIf="person[1] !== 0">
-              <span [ngStyle]="{
-                                  'color': color(person[1]),
-                                  '-webkit-text-stroke-width': color(person[1]) === '' ? '' : '.5px',
-                                  '-webkit-text-stroke-color': 'black'
-                              }">
-                &nbsp;{{ person[1] | number }}&nbsp;
-              </span>
-              <!- {{person[1] < 10 ? ('0' + person[1]) : person[1] | number}} ->
-            </td>
-            </ng-container>
-            <td
-              class="font-weight-bold text-primary text-center align-middle">
-              {{ song.getTotal() | number}}
-            </td>
-            <td
-              class="align-middle text-secondary text-bold text-center">
-              {{ +songsOrder.indexOf(song) + 1 }}
-            </td> -->
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-    <div
-    class="mt-5"
-    *ngIf="isLoading"
-    style="text-align: center;">
-      <app-loading-spinner></app-loading-spinner>
+        </tbody>
+      </table>
+      <div
+        class="mt-5"
+        *ngIf="isLoading"
+        style="text-align: center;">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    </div>
+    <div class="col-md-1 mt-5 mr-1">
+      <button class="btn btn-success ml-3 mb-3" (click)="onVote()">To Voting</button>
+      <br>
+      <button class="btn btn-info ml-3 mb-3" (click)="onJury()">
+        {{ jury ? 'Normal' : 'Exp' }}
+      </button>
+      <br>
+      <br>
+      <button class="btn btn-info ml-3 mb-3" (click)="onStart()" [disabled]="shown === 0">
+        {{ isStart ? 'Stop' : shown === songs.length ? 'Start' : 'Continue' }}
+      </button>
+      <br>
+      <button class="btn btn-warning ml-3 mb-3" (click)="shown = 0; isStart=false;" [disabled]="shown === 0">
+        Skip
+      </button>
+      <br>
+      <button class="btn btn-danger ml-3" (click)="onReset()" [disabled]="shown === songs.length">
+        Reset
+      </button>
     </div>
   </div>
-  <div class="col-md-1 mt-5 mr-1">
-    <button class="btn btn-success ml-3 mb-3" (click)="onVote()">To Voting</button>
-    <br>
-    <button class="btn btn-info ml-3 mb-3" (click)="onTable()">
-      {{ table ? 'Go Back' : 'To Table' }}
-    </button>
-    <br>
-    <button class="btn btn-info ml-3 mb-3" (click)="onJury()" [disabled]="!table">
-      {{ jury ? 'Normal' : 'Exp' }}
-    </button>
-    <br>
-    <br>
-    <button class="btn btn-info ml-3 mb-3" (click)="onStart()" [disabled]="shown === 10 || table">
-      {{ isStart ? 'Stop' : shown === 0 ? 'Start' :  'Continue' }}
-    </button>
-    <br>
-    <button class="btn btn-warning ml-3 mb-3" (click)="shown = 10; isStart=false;" [disabled]="shown === 10 || table">
-      Skip
-    </button>
-    <br>
-    <button class="btn btn-danger ml-3" (click)="onReset()" [disabled]="shown === 0 || table">
-      Reset
-    </button>
-  </div>
-</div>
+</ng-container>
 
+<!-- SF1 / SF2 view -->
+<ng-container *ngIf="!isFinal">
+  <div class="row">
+    <div class="col-md-11 mt-5">
+      <table
+        *ngIf="table"
+        class="restable fullres table-sm"
+        data-mobile-responsive="true">
+        <thead class="header">
+          <tr>
+            <th style="width: 4%;" scope="col">#</th>
+            <th style="width: 25%;" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
+            <ng-container *ngFor="let person of songsOrder[0].votes">
+              <th *ngIf="person[1] !== 0" style="width: 9%;" class="text-center" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
+            </ng-container>
+            <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{jury === true ? ' RExp' : 'Result'}}</th>
+            <th style="width: 6%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th>
+          </tr>
+        </thead>
+        <tbody class="over">
+          <ng-container *ngFor="let song of songsOrder; let i = index">
+            <tr
+              [ngStyle]="{'background-color': placement(song)}">
+              <td
+                class="{{setColour(song)}} align-middle font-weight-bold">
+                {{ +i + 1 }}
+              </td>
+              <td
+                class="align-middle">
+                <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+                <span class="{{setColour(song)}} h5"> {{ song.countryName }}</span>
+              </td>
+              <ng-container *ngFor="let person of song.votes">
+                <td
+                class="{{setColour(song)}} text-center font-weight-bold align-middle"
+                *ngIf="person[1] !== 0">
+                <span [ngStyle]="{
+                                    'color': color(person[1]),
+                                    'background-color': color(person[1]) === '' ? 'transparent' : 'black',
+                                    'border-radius': color(person[1]) === '' ? '1px' : '50px',
+                                    '-webkit-text-stroke-width': color(person[1]) === '' ? '' : '.5px',
+                                    '-webkit-text-stroke-color': 'white'
+                                }">
+                  &nbsp;{{ person[1] | number }}&nbsp;
+                </span>
+              </td>
+              </ng-container>
+              <td
+                class="{{setColour(song)}} text-bold text-center align-middle">
+                {{ jury === true ? song.getExpWeightTotal() : song.getTotal() | number}}
+              </td>
+              <td
+                class="align-middle {{setColour(song)}} text-bold text-center">
+                {{ +songsOrder1.indexOf(song) + 1 }}
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <table
+        *ngIf="!table"
+        class="restable res table-sm"
+        data-mobile-responsive="true">
+        <thead class="header">
+          <tr>
+            <th style="width: 4%;" scope="col">#</th>
+            <th style="width: 25%;" scope="col">Country</th>
+          </tr>
+        </thead>
+        <tbody class="over">
+          <ng-container *ngFor="let song of songsOrder; let i = index">
+            <tr
+              [ngStyle]="{'background-color': placement(song)}">
+              <td
+                class="{{setColour(song)}} align-middle font-weight-bold">
+                {{ +i + 1 }}
+              </td>
+              <td
+                class="align-middle">
+                <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+                <span class="h5 {{setColour(song)}}"> {{ song.countryName }}</span>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <div
+      class="mt-5"
+      *ngIf="isLoading"
+      style="text-align: center;">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    </div>
+    <div class="col-md-1 mt-5 mr-1">
+      <button class="btn btn-success ml-3 mb-3" (click)="onVote()">To Voting</button>
+      <br>
+      <button class="btn btn-info ml-3 mb-3" (click)="onTable()">
+        {{ table ? 'Go Back' : 'To Table' }}
+      </button>
+      <br>
+      <button class="btn btn-info ml-3 mb-3" (click)="onJury()" [disabled]="!table">
+        {{ jury ? 'Normal' : 'Exp' }}
+      </button>
+      <br>
+      <br>
+      <button class="btn btn-info ml-3 mb-3" (click)="onStart()" [disabled]="shown === 10 || table">
+        {{ isStart ? 'Stop' : shown === 0 ? 'Start' :  'Continue' }}
+      </button>
+      <br>
+      <button class="btn btn-warning ml-3 mb-3" (click)="shown = 10; isStart=false;" [disabled]="shown === 10 || table">
+        Skip
+      </button>
+      <br>
+      <button class="btn btn-danger ml-3" (click)="onReset()" [disabled]="shown === 0 || table">
+        Reset
+      </button>
+    </div>
+  </div>
+</ng-container>
