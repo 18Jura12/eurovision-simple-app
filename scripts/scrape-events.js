@@ -113,14 +113,44 @@ function extractArray(js, varName) {
   }
 }
 
+function extractObject(js, varName) {
+  const declIdx = js.search(new RegExp(`${varName}\\s*=\\s*\\{`));
+  if (declIdx === -1) return null;
+  const start = js.indexOf('{', declIdx);
+  let depth = 0;
+  for (let i = start; i < js.length; i++) {
+    if (js[i] === '{') depth++;
+    else if (js[i] === '}') {
+      depth--;
+      if (depth === 0) {
+        try { return JSON.parse(js.slice(start, i + 1)); } catch { return null; }
+      }
+    }
+  }
+  return null;
+}
+
 async function getCountriesFromVotingJs(jsId) {
   const { status, body } = await fetchUrl(`https://eurovisionworld.com/scripts/js/voting/${jsId}.js`);
   if (status !== 200) return [];
 
-  const codes = extractArray(body, 'voting_table_main_arr') || [];
+  // voting_table_main is an object: { countryCode: [runningOrderPosition, ...], ... }
+  // Index 0 of each value array is the running order position (1-based).
+  // This is the authoritative source for performance order.
+  const tableMain = extractObject(body, 'voting_table_main');
+  if (tableMain && typeof tableMain === 'object') {
+    const entries = Object.entries(tableMain)
+      .filter(([code]) => COUNTRY_NAMES[code] !== undefined && COUNTRY_NAMES[code] !== null)
+      .filter(([, data]) => Array.isArray(data) && typeof data[0] === 'number' && data[0] > 0)
+      .sort((a, b) => a[1][0] - b[1][0]);
+    if (entries.length > 0) {
+      return entries.map(([code]) => COUNTRY_NAMES[code]);
+    }
+  }
 
-  // Some Finals (e.g. 2026) put only the Big Five in main_arr and qualifying
-  // countries in a nested sub_arr — flatten and append any missing entries.
+  // Fallback for events where position data isn't published yet (e.g. upcoming Finals):
+  // use voting_table_main_arr and merge in sub_arr (Big Five + SF qualifiers).
+  const codes = extractArray(body, 'voting_table_main_arr') || [];
   const subArr = extractArray(body, 'voting_table_sub_arr');
   if (subArr) {
     const subCodes = Array.isArray(subArr[0]) ? subArr.flat() : subArr;
@@ -172,7 +202,7 @@ async function scrapeEvent(year, eventName, urlSuffix) {
 
     await putToFirebase(`/catalog/${year}/${eventName}.json`, { countries });
     console.log(`${countries.length} countries saved`);
-    await sleep(800);
+    await sleep(1500);
     return countries;
   } catch (e) {
     console.log(`error: ${e.message}`);
