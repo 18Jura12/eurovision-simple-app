@@ -61,7 +61,7 @@ export class AdminComponent implements OnInit {
 
   getEvents(year: string): string[] {
     const order: {[k: string]: number} = { SF1: 0, SF2: 1, Final: 2 };
-    return Object.keys(this.catalog[year]).sort((a, b) => (order[a] ?? 9) - (order[b] ?? 9));
+    return Object.keys(this.catalog[year]).filter(e => e !== 'AllSongs').sort((a, b) => (order[a] ?? 9) - (order[b] ?? 9));
   }
 
   getCountries(year: string, event: string): string[] {

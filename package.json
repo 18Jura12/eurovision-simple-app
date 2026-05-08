@@ -7,6 +7,7 @@
     "test": "ng test",
     "e2e": "ng e2e",
     "deploy": "ng build --configuration production && firebase deploy --only hosting",
+    "allsongs": "node scripts/generate-allsongs.js",
     "start": "node server.js",
     "lint": "eslint -c .eslintrc.js --ext .ts ."
   },

@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { DataStorageService } from '../shared/data-storage.service';
@@ -52,9 +52,6 @@ export class VotingComponent implements OnInit {
         this.isLoading = false;
         if (existingVotes !== null) {
           this.hasVoted = true;
-          this.songs.sort((a, b) =>
-            (existingVotes[a.countryName] ?? 999) - (existingVotes[b.countryName] ?? 999)
-          );
           this.toastrService.warning('You have already voted — you can update your votes below.');
         }
         this.initForm();

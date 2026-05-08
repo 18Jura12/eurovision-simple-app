@@ -118,6 +118,17 @@ async function getCountriesFromVotingJs(jsId) {
   if (status !== 200) return [];
 
   const codes = extractArray(body, 'voting_table_main_arr') || [];
+
+  // Some Finals (e.g. 2026) put only the Big Five in main_arr and qualifying
+  // countries in a nested sub_arr — flatten and append any missing entries.
+  const subArr = extractArray(body, 'voting_table_sub_arr');
+  if (subArr) {
+    const subCodes = Array.isArray(subArr[0]) ? subArr.flat() : subArr;
+    for (const code of subCodes) {
+      if (!codes.includes(code)) codes.push(code);
+    }
+  }
+
   return codes
     .filter(code => COUNTRY_NAMES[code] !== undefined && COUNTRY_NAMES[code] !== null)
     .map(code => COUNTRY_NAMES[code]);
