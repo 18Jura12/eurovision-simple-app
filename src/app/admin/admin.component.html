@@ -14,7 +14,12 @@
 </div>
 
 <div *ngIf="isAuthenticated" class="container mt-4">
-  <h4 class="mb-4">Select Active Event</h4>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Select Active Event</h4>
+    <button class="btn btn-outline-danger" (click)="clearVotes()">
+      <i class="bi bi-trash"></i> Clear votes — {{ activeEvent.year }} {{ activeEvent.event }}
+    </button>
+  </div>
 
   <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
 

@@ -96,6 +96,15 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  clearVotes(): void {
+    const { year, event } = this.activeEvent;
+    if (!confirm(`Delete ALL votes for ${year} ${event}? This cannot be undone.`)) return;
+    this.isLoading = true;
+    this.dataStorageService.clearAllVotes().subscribe(() => {
+      this.isLoading = false;
+    });
+  }
+
   selectAllSongs(year: string): void {
     const countries = this.getAllSongsCountries(year);
     const config: EventConfig = { year: +year, event: 'AllSongs', countries };

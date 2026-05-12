@@ -35,6 +35,10 @@ export class DataStorageService {
     return this.http.get<string | null>(`${DB}/config/adminPasswordHash.json`);
   }
 
+  clearAllVotes(): Observable<any> {
+    return this.http.delete(`${this.basePath}.json`);
+  }
+
   fetchActiveEvent(): Observable<any | null> {
     return this.http.get<any | null>(`${DB}/config/activeEvent.json`);
   }
