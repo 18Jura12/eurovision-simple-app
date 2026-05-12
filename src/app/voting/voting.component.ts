@@ -37,11 +37,34 @@ export class VotingComponent implements OnInit {
     votingService: VotingService,
     private dataStorageService: DataStorageService,
     private loginService: LoginService,
-    eventService: EventService
+    private eventService: EventService
   ) {
     this.songs = votingService.getSongs();
     const event = eventService.getActive().event;
     this.isFinal = event === 'Final' || event === 'AllSongs';
+  }
+
+  private get draftKey(): string {
+    const { year, event } = this.eventService.getActive();
+    return `votingDraft_${year}_${event}_${this.login}`;
+  }
+
+  private saveDraft(): void {
+    localStorage.setItem(this.draftKey, JSON.stringify(this.songs.map(s => s.countryName)));
+  }
+
+  private loadDraft(): string[] | null {
+    const raw = localStorage.getItem(this.draftKey);
+    return raw ? JSON.parse(raw) : null;
+  }
+
+  private clearDraft(): void {
+    localStorage.removeItem(this.draftKey);
+  }
+
+  private restoreOrder(order: string[]): SongDB[] {
+    const songMap = new Map(this.songs.map(s => [s.countryName, s]));
+    return order.map(name => songMap.get(name)).filter((s): s is SongDB => s !== undefined);
   }
 
   ngOnInit(): void {
@@ -53,6 +76,13 @@ export class VotingComponent implements OnInit {
         if (existingVotes !== null) {
           this.hasVoted = true;
           this.toastrService.warning('You have already voted — you can update your votes below.');
+          this.songs.sort((a, b) => (existingVotes[a.countryName] ?? 999) - (existingVotes[b.countryName] ?? 999));
+          this.clearDraft();
+        } else {
+          const draft = this.loadDraft();
+          if (draft) {
+            this.songs = this.restoreOrder(draft);
+          }
         }
         this.initForm();
         this.toastrService.info('Drag items in order from first(1) to last(' + this.songs.length + ')');
@@ -92,6 +122,7 @@ export class VotingComponent implements OnInit {
     this.dataStorageService.storeVotes(this.login, votes).subscribe(
       () => {
         this.isLoading = false;
+        this.clearDraft();
         this.router.navigate(['/result']);
       }
     );
@@ -114,6 +145,7 @@ export class VotingComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.songs, event.previousIndex, event.currentIndex);
+    this.saveDraft();
   }
 
   setClass(i: number): string {
