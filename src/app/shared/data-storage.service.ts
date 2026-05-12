@@ -35,4 +35,12 @@ export class DataStorageService {
     return this.http.get<string | null>(`${DB}/config/adminPasswordHash.json`);
   }
 
+  fetchActiveEvent(): Observable<any | null> {
+    return this.http.get<any | null>(`${DB}/config/activeEvent.json`);
+  }
+
+  storeActiveEvent(config: any): Observable<any> {
+    return this.http.put(`${DB}/config/activeEvent.json`, config);
+  }
+
 }

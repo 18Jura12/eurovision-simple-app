@@ -89,13 +89,19 @@ export class AdminComponent implements OnInit {
 
   selectEvent(year: string, event: string): void {
     const countries = this.getCountries(year, event);
-    this.eventService.setActive({ year: +year, event: event as EventType, countries });
-    window.location.href = '/login';
+    const config: EventConfig = { year: +year, event: event as EventType, countries };
+    this.eventService.setActive(config);
+    this.dataStorageService.storeActiveEvent(config).subscribe(() => {
+      window.location.href = '/login';
+    });
   }
 
   selectAllSongs(year: string): void {
     const countries = this.getAllSongsCountries(year);
-    this.eventService.setActive({ year: +year, event: 'AllSongs', countries });
-    window.location.href = '/login';
+    const config: EventConfig = { year: +year, event: 'AllSongs', countries };
+    this.eventService.setActive(config);
+    this.dataStorageService.storeActiveEvent(config).subscribe(() => {
+      window.location.href = '/login';
+    });
   }
 }
