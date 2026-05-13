@@ -354,12 +354,25 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.sub.unsubscribe();
       this.isStart = false;
     }
-    this.songsOrder = this.sortResults();
+    if (!this.isFinal) {
+      this.mode = 'normal';
+      this.songsOrder = this.songsOrder1.slice();
+      this.songs = this.sortResults().slice(0, 10);
+    } else {
+      this.songsOrder = this.sortResults();
+    }
     this.headers.forEach(h => h.direction = '');
     this.shown = this.isFinal ? this.songs.length : 0;
   }
 
   onTable() {
+    if (this.table) {
+      // Going back to simple view — reset to running order, normal mode, refresh highlights
+      this.mode = 'normal';
+      this.songsOrder = this.songsOrder1.slice();
+      this.songs = this.sortResults().slice(0, 10);
+      this.headers.forEach(h => h.direction = '');
+    }
     this.table = !this.table;
     this.shown = 10;
     this.isStart = false;
