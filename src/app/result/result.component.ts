@@ -78,9 +78,9 @@ export class ResultComponent implements OnInit, OnDestroy {
           this.songs.push(new SongDB(song.countryFlag, song.countryName, points));
         }
         this.votingService.setSongs(this.songs);
-        this.songsOrder = this.songs.slice();
-        this.songsOrder1 = this.songsOrder.slice();
+        this.songsOrder1 = this.songs.slice();
         this.songs = this.sortResults();
+        this.songsOrder = this.songs.slice();
 
         if (this.isFinal) {
           // All countries, sorted, no shuffle — countdown from full count
