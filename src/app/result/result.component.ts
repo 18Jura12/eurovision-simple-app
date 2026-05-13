@@ -41,7 +41,7 @@ export class NgbdSortableHeader {
   styleUrls: ['./result.component.less']
 })
 export class ResultComponent implements OnInit, OnDestroy {
-  jury: boolean = false;
+  mode: 'normal' | 'jury' | 'televote' = 'normal';
   songs: SongDB[] = [];
   songsOrder: SongDB[] = [];
   songsOrder1: SongDB[] = [];
@@ -115,6 +115,10 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.songsOrder = _.orderBy(
         this.songsOrder, 'countryName', [direction]);
     } else if(column === 'result') {
+      if (this.mode === 'televote') {
+        this.songsOrder = _.orderBy(this.songsOrder, item => item.getEuroTotal(), [direction]);
+        return;
+      }
       this.songsOrder = _.orderBy(
         this.songsOrder,
         [
@@ -170,8 +174,10 @@ export class ResultComponent implements OnInit, OnDestroy {
     return  _.orderBy(
       this.songsOrder.slice(),
       [
-        this.jury === true ?
+        this.mode === 'jury' ?
         item => item.getExpWeightTotal() ** (+(-1)) :
+        this.mode === 'televote' ?
+        item => -item.getEuroTotal() :
         item => item.getTotal(),
         item => {
           let array = _.toArray(item.points);
@@ -360,13 +366,36 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   onJury() {
-    this.jury = !this.jury;
+    this.mode = this.mode === 'jury' ? 'normal' : 'jury';
     if (this.isFinal) {
       this.songsOrder = this.sortResults();
       this.songs = this.songsOrder.slice();
     } else {
       this.songs = this.sortResults();
     }
+  }
+
+  onTelevote() {
+    this.mode = this.mode === 'televote' ? 'normal' : 'televote';
+    if (this.isFinal) {
+      this.songsOrder = this.sortResults();
+      this.songs = this.songsOrder.slice();
+    } else {
+      this.songs = this.sortResults();
+    }
+  }
+
+  televotePoints(placement: number): number {
+    const map: {[k: number]: number} = {1:12, 2:10, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1};
+    return map[placement] ?? 0;
+  }
+
+  colorTelevote(pts: number): string {
+    if (pts === 12) return 'gold';
+    if (pts === 10) return 'rgb(250, 250, 250)';
+    if (pts === 8) return '#CD7F32';
+    if (pts > 0) return '#0099FF';
+    return '';
   }
 
   allVoted(): boolean {

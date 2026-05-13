@@ -14,7 +14,7 @@
             <ng-container *ngFor="let person of songsOrder[0].votes">
               <th *ngIf="person[1] !== 0" style="width: 9%;" class="text-center" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
             </ng-container>
-            <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{jury === true ? 'RExp' : 'Result'}}</th>
+            <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{mode === 'jury' ? 'RExp' : mode === 'televote' ? 'Points' : 'Result'}}</th>
             <th style="width: 6%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th>
           </tr>
         </thead>
@@ -34,19 +34,32 @@
                 <td
                   class="{{setColour(song)}} text-center font-weight-bold align-middle"
                   *ngIf="person[1] !== 0">
-                  <span [ngStyle]="{
-                    'color': color(person[1]),
-                    'background-color': color(person[1]) !== '' && color(person[1]) !== '#0099FF' ? 'black' : 'transparent',
-                    'border-radius': color(person[1]) !== '' && color(person[1]) !== '#0099FF' ? '50px' : '1px',
-                    '-webkit-text-stroke-width': color(person[1]) !== '' && color(person[1]) !== '#0099FF' ? '.5px' : '',
-                    '-webkit-text-stroke-color': 'white'
-                  }">
-                    &nbsp;{{ person[1] | number }}&nbsp;
-                  </span>
+                  <ng-container *ngIf="mode !== 'televote'">
+                    <span [ngStyle]="{
+                      'color': color(person[1]),
+                      'background-color': color(person[1]) !== '' && color(person[1]) !== '#0099FF' ? 'black' : 'transparent',
+                      'border-radius': color(person[1]) !== '' && color(person[1]) !== '#0099FF' ? '50px' : '1px',
+                      '-webkit-text-stroke-width': color(person[1]) !== '' && color(person[1]) !== '#0099FF' ? '.5px' : '',
+                      '-webkit-text-stroke-color': 'white'
+                    }">
+                      &nbsp;{{ person[1] | number }}&nbsp;
+                    </span>
+                  </ng-container>
+                  <ng-container *ngIf="mode === 'televote' && televotePoints(person[1]) > 0">
+                    <span [ngStyle]="{
+                      'color': colorTelevote(televotePoints(person[1])),
+                      'background-color': colorTelevote(televotePoints(person[1])) !== '' && colorTelevote(televotePoints(person[1])) !== '#0099FF' ? 'black' : 'transparent',
+                      'border-radius': colorTelevote(televotePoints(person[1])) !== '' && colorTelevote(televotePoints(person[1])) !== '#0099FF' ? '50px' : '1px',
+                      '-webkit-text-stroke-width': colorTelevote(televotePoints(person[1])) !== '' && colorTelevote(televotePoints(person[1])) !== '#0099FF' ? '.5px' : '',
+                      '-webkit-text-stroke-color': 'white'
+                    }">
+                      &nbsp;{{ televotePoints(person[1]) | number }}&nbsp;
+                    </span>
+                  </ng-container>
                 </td>
               </ng-container>
               <td class="{{setColour(song)}} text-center align-middle" style="font-size: 20px;">
-                {{ jury === true ? song.getExpWeightTotal() : song.getTotal() | number }}
+                {{ mode === 'jury' ? song.getExpWeightTotal() : mode === 'televote' ? song.getEuroTotal() : song.getTotal() | number }}
               </td>
               <td class="align-middle {{setColour(song)}} text-bold text-center">
                 {{ +songsOrder1.indexOf(song) + 1 }}
@@ -66,7 +79,11 @@
       <button class="btn btn-success ml-3 mb-3" (click)="onVote()">To Voting</button>
       <br>
       <button class="btn btn-info ml-3 mb-3" (click)="onJury()">
-        {{ jury ? 'Normal' : 'Exp' }}
+        {{ mode === 'jury' ? 'Normal' : 'Exp' }}
+      </button>
+      <br>
+      <button class="btn btn-info ml-3 mb-3" (click)="onTelevote()">
+        {{ mode === 'televote' ? 'Normal' : 'Points' }}
       </button>
       <br>
       <br>
@@ -102,7 +119,7 @@
             <ng-container *ngFor="let person of songsOrder[0].votes">
               <th *ngIf="person[1] !== 0" style="width: 9%;" class="text-center" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
             </ng-container>
-            <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{jury === true ? ' RExp' : 'Result'}}</th>
+            <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{mode === 'jury' ? 'RExp' : mode === 'televote' ? 'Points' : 'Result'}}</th>
             <th style="width: 6%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th>
           </tr>
         </thead>
@@ -123,20 +140,33 @@
                 <td
                 class="{{setColour(song)}} text-center font-weight-bold align-middle"
                 *ngIf="person[1] !== 0">
-                <span [ngStyle]="{
-                                    'color': color(person[1]),
-                                    'background-color': color(person[1]) === '' ? 'transparent' : 'black',
-                                    'border-radius': color(person[1]) === '' ? '1px' : '50px',
-                                    '-webkit-text-stroke-width': color(person[1]) === '' ? '' : '.5px',
-                                    '-webkit-text-stroke-color': 'white'
-                                }">
-                  &nbsp;{{ person[1] | number }}&nbsp;
-                </span>
+                  <ng-container *ngIf="mode !== 'televote'">
+                    <span [ngStyle]="{
+                      'color': color(person[1]),
+                      'background-color': color(person[1]) === '' ? 'transparent' : 'black',
+                      'border-radius': color(person[1]) === '' ? '1px' : '50px',
+                      '-webkit-text-stroke-width': color(person[1]) === '' ? '' : '.5px',
+                      '-webkit-text-stroke-color': 'white'
+                    }">
+                      &nbsp;{{ person[1] | number }}&nbsp;
+                    </span>
+                  </ng-container>
+                  <ng-container *ngIf="mode === 'televote' && televotePoints(person[1]) > 0">
+                    <span [ngStyle]="{
+                      'color': colorTelevote(televotePoints(person[1])),
+                      'background-color': colorTelevote(televotePoints(person[1])) !== '' && colorTelevote(televotePoints(person[1])) !== '#0099FF' ? 'black' : 'transparent',
+                      'border-radius': colorTelevote(televotePoints(person[1])) !== '' && colorTelevote(televotePoints(person[1])) !== '#0099FF' ? '50px' : '1px',
+                      '-webkit-text-stroke-width': colorTelevote(televotePoints(person[1])) !== '' && colorTelevote(televotePoints(person[1])) !== '#0099FF' ? '.5px' : '',
+                      '-webkit-text-stroke-color': 'white'
+                    }">
+                      &nbsp;{{ televotePoints(person[1]) | number }}&nbsp;
+                    </span>
+                  </ng-container>
               </td>
               </ng-container>
               <td
                 class="{{setColour(song)}} text-bold text-center align-middle">
-                {{ jury === true ? song.getExpWeightTotal() : song.getTotal() | number}}
+                {{ mode === 'jury' ? song.getExpWeightTotal() : mode === 'televote' ? song.getEuroTotal() : song.getTotal() | number}}
               </td>
               <td
                 class="align-middle {{setColour(song)}} text-bold text-center">
@@ -188,7 +218,11 @@
       </button>
       <br>
       <button class="btn btn-info ml-3 mb-3" (click)="onJury()" [disabled]="!table">
-        {{ jury ? 'Normal' : 'Exp' }}
+        {{ mode === 'jury' ? 'Normal' : 'Exp' }}
+      </button>
+      <br>
+      <button class="btn btn-info ml-3 mb-3" (click)="onTelevote()" [disabled]="!table">
+        {{ mode === 'televote' ? 'Normal' : 'Points' }}
       </button>
       <br>
       <br>

@@ -28,6 +28,8 @@ export class VotingComponent implements OnInit {
   voteForm!: UntypedFormGroup;
   isFinal: boolean;
   hasVoted = false;
+  showVotePrompt = false;
+  private pendingVotes: {[country: string]: number} | null = null;
 
   songs: SongDB[];
 
@@ -72,20 +74,20 @@ export class VotingComponent implements OnInit {
     this.isLoading = true;
     this.dataStorageService.fetchUserVotes(this.login).subscribe(
       (existingVotes) => {
-        this.isLoading = false;
         if (existingVotes !== null) {
+          this.isLoading = false;
           this.hasVoted = true;
-          this.toastrService.warning('You have already voted — you can update your votes below.');
-          this.songs.sort((a, b) => (existingVotes[a.countryName] ?? 999) - (existingVotes[b.countryName] ?? 999));
-          this.clearDraft();
+          this.pendingVotes = existingVotes;
+          this.showVotePrompt = true;
         } else {
+          this.isLoading = false;
           const draft = this.loadDraft();
           if (draft) {
             this.songs = this.restoreOrder(draft);
           }
+          this.initForm();
+          this.toastrService.info('Drag items in order from first(1) to last(' + this.songs.length + ')');
         }
-        this.initForm();
-        this.toastrService.info('Drag items in order from first(1) to last(' + this.songs.length + ')');
       }
     );
   }
@@ -126,6 +128,25 @@ export class VotingComponent implements OnInit {
         this.router.navigate(['/result']);
       }
     );
+  }
+
+  onLoadPrevious(): void {
+    this.songs.sort((a, b) =>
+      (this.pendingVotes![a.countryName] ?? 999) - (this.pendingVotes![b.countryName] ?? 999)
+    );
+    this.clearDraft();
+    this.showVotePrompt = false;
+    this.isLoading = false;
+    this.initForm();
+    this.toastrService.info('Drag items in order from first(1) to last(' + this.songs.length + ')');
+  }
+
+  onResetOrder(): void {
+    this.clearDraft();
+    this.showVotePrompt = false;
+    this.isLoading = false;
+    this.initForm();
+    this.toastrService.info('Drag items in order from first(1) to last(' + this.songs.length + ')');
   }
 
   onCancel() {

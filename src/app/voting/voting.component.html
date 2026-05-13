@@ -1,3 +1,14 @@
+<div *ngIf="showVotePrompt" class="vote-prompt-overlay">
+  <div class="vote-prompt-dialog">
+    <p class="vote-prompt-title">You have already voted.</p>
+    <p class="vote-prompt-subtitle">How would you like to start?</p>
+    <div class="vote-prompt-buttons">
+      <button class="btn btn-secondary" (click)="onLoadPrevious()">Load previous ranking</button>
+      <button class="btn btn-vote" (click)="onResetOrder()">Running order (default)</button>
+    </div>
+  </div>
+</div>
+
 <div class="vote-container">
   <form [formGroup]="voteForm" (ngSubmit)="onSubmit()">
     <div formArrayName="votes" class="drag-list" cdkDropList (cdkDropListDropped)="drop($event)">
