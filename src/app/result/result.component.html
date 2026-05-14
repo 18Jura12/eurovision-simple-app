@@ -3,35 +3,35 @@
 <div class="container-fluid px-3">
   <div class="row">
     <div class="col-md-11 mt-5">
+      <div class="table-scroll-wrapper" *ngIf="songsOrder.length > 0">
       <table
-        *ngIf="songsOrder.length > 0"
+        [class.table-expand]="rotateHeaders"
         class="restable fullres table-sm"
         data-mobile-responsive="true">
         <thead class="header">
           <tr>
-            <th style="width: 4%;" scope="col">#</th>
-            <th style="width: 25%;" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
+            <th #rankTh [style.width]="rankColWidth" [class.sticky-rank]="rotateHeaders" scope="col">#</th>
+            <th style="width: 25%;" [class.sticky-country]="rotateHeaders" [style.left]="rotateHeaders ? stickyCountryLeft : null" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
             <ng-container *ngFor="let person of songsOrder[0].votes">
-              <th *ngIf="person[1] !== 0" style="width: 9%;" class="text-center" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
+              <th *ngIf="person[1] !== 0" [style.width]="voterColWidth" class="voter-col text-center" [class.sorted-voter]="currentSortColumn === person[0]" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
             </ng-container>
-            <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{mode === 'jury' ? 'RExp' : mode === 'televote' ? 'Points' : 'Result'}}</th>
-            <th style="width: 6%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th>
+            <th style="width: 8%;" [class.sticky-result]="rotateHeaders" [style.right]="rotateHeaders ? stickyResultRight : null" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{mode === 'jury' ? 'RExp' : mode === 'televote' ? 'Points' : 'Result'}}</th>
+            <th #orderTh [style.width]="orderColWidth" [class.sticky-order]="rotateHeaders" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th>
           </tr>
         </thead>
         <tbody class="over">
           <ng-container *ngFor="let song of songsOrder; let i = index">
-            <tr
-              *ngIf="shown <= i"
-              [ngStyle]="{'background-color': placement(song)}">
-              <td class="{{setColour(song)}} align-middle font-weight-bold">
+            <tr *ngIf="shown <= i">
+              <td [class.sticky-rank]="rotateHeaders" [style.background-color]="placementOpaque(song)" class="{{setColour(song)}} align-middle font-weight-bold">
                 {{ sortResults().indexOf(song) + 1 }}
               </td>
-              <td class="align-middle">
+              <td [class.sticky-country]="rotateHeaders" [style.left]="rotateHeaders ? stickyCountryLeft : null" [style.background-color]="placementOpaque(song)" class="country-col align-middle">
                 <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
                 <span class="{{setColour(song)}} h5"> {{ song.countryName }}</span>
               </td>
               <ng-container *ngFor="let person of song.votes">
                 <td
+                  [style.background-color]="placement(song)"
                   class="{{setColour(song)}} text-center font-weight-bold align-middle"
                   *ngIf="person[1] !== 0">
                   <ng-container *ngIf="mode !== 'televote'">
@@ -58,16 +58,17 @@
                   </ng-container>
                 </td>
               </ng-container>
-              <td class="{{setColour(song)}} text-center align-middle" style="font-size: 20px;">
+              <td [class.sticky-result]="rotateHeaders" [style.right]="rotateHeaders ? stickyResultRight : null" [style.background-color]="placementOpaque(song)" class="{{setColour(song)}} text-center align-middle" style="font-size: 20px;">
                 {{ mode === 'jury' ? song.getExpWeightTotal() : mode === 'televote' ? song.getEuroTotal() : song.getTotal() | number }}
               </td>
-              <td class="align-middle {{setColour(song)}} text-bold text-center">
+              <td [class.sticky-order]="rotateHeaders" [style.background-color]="placementOpaque(song)" class="align-middle {{setColour(song)}} text-bold text-center">
                 {{ +songsOrder1.indexOf(song) + 1 }}
               </td>
             </tr>
           </ng-container>
         </tbody>
       </table>
+      </div>
       <div
         class="mt-5"
         *ngIf="isLoading"
@@ -108,36 +109,39 @@
 <div class="container-fluid px-3">
   <div class="row">
     <div class="col-md-11 mt-5">
+      <div class="table-scroll-wrapper" *ngIf="table">
       <table
-        *ngIf="table"
+        [class.table-expand]="rotateHeaders"
         class="restable fullres table-sm"
         data-mobile-responsive="true">
         <thead class="header">
           <tr>
-            <th style="width: 4%;" scope="col">#</th>
-            <th style="width: 25%;" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
+            <th #rankTh [style.width]="rankColWidth" [class.sticky-rank]="rotateHeaders" scope="col">#</th>
+            <th style="width: 25%;" [class.sticky-country]="rotateHeaders" [style.left]="rotateHeaders ? stickyCountryLeft : null" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
             <ng-container *ngFor="let person of songsOrder[0].votes">
-              <th *ngIf="person[1] !== 0" style="width: 9%;" class="text-center" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
+              <th *ngIf="person[1] !== 0" [style.width]="voterColWidth" class="voter-col text-center" [class.sorted-voter]="currentSortColumn === person[0]" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
             </ng-container>
-            <th style="width: 8%;" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{mode === 'jury' ? 'RExp' : mode === 'televote' ? 'Points' : 'Result'}}</th>
-            <th style="width: 6%;" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th>
+            <th style="width: 8%;" [class.sticky-result]="rotateHeaders" [style.right]="rotateHeaders ? stickyResultRight : null" class="text-center" scope="col" sortable="result" (sort)="onSort($event)">{{mode === 'jury' ? 'RExp' : mode === 'televote' ? 'Points' : 'Result'}}</th>
+            <th #orderTh [style.width]="orderColWidth" [class.sticky-order]="rotateHeaders" class="text-center" scope="col" sortable="order" (sort)="onSort($event)">O</th>
           </tr>
         </thead>
         <tbody class="over">
           <ng-container *ngFor="let song of songsOrder; let i = index">
-            <tr
-              [ngStyle]="{'background-color': placement(song)}">
+            <tr>
               <td
+                [class.sticky-rank]="rotateHeaders" [style.background-color]="placementOpaque(song)"
                 class="{{setColour(song)}} align-middle font-weight-bold">
                 {{ +i + 1 }}
               </td>
               <td
-                class="align-middle">
+                [class.sticky-country]="rotateHeaders" [style.left]="rotateHeaders ? stickyCountryLeft : null" [style.background-color]="placementOpaque(song)"
+                class="country-col align-middle">
                 <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
                 <span class="{{setColour(song)}} h5"> {{ song.countryName }}</span>
               </td>
               <ng-container *ngFor="let person of song.votes">
                 <td
+                [style.background-color]="placement(song)"
                 class="{{setColour(song)}} text-center font-weight-bold align-middle"
                 *ngIf="person[1] !== 0">
                   <ng-container *ngIf="mode !== 'televote'">
@@ -165,10 +169,12 @@
               </td>
               </ng-container>
               <td
+                [class.sticky-result]="rotateHeaders" [style.right]="rotateHeaders ? stickyResultRight : null" [style.background-color]="placementOpaque(song)"
                 class="{{setColour(song)}} text-bold text-center align-middle">
                 {{ mode === 'jury' ? song.getExpWeightTotal() : mode === 'televote' ? song.getEuroTotal() : song.getTotal() | number}}
               </td>
               <td
+                [class.sticky-order]="rotateHeaders" [style.background-color]="placementOpaque(song)"
                 class="align-middle {{setColour(song)}} text-bold text-center">
                 {{ +songsOrder1.indexOf(song) + 1 }}
               </td>
@@ -176,6 +182,7 @@
           </ng-container>
         </tbody>
       </table>
+      </div>
       <table
         *ngIf="!table"
         class="restable res table-sm"

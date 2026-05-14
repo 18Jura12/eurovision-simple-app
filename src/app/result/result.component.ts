@@ -1,4 +1,4 @@
-import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DataStorageService } from '../shared/data-storage.service';
 import { SongDB, VotingService } from '../voting/voting.service';
 import * as _ from 'lodash-es';
@@ -52,6 +52,39 @@ export class ResultComponent implements OnInit, OnDestroy {
   source = interval(5000);
   table: boolean = false;
   isFinal: boolean;
+  currentSortColumn: SortColumn = '';
+
+  private readonly bgBase = { r: 10, g: 4, b: 53 };
+
+  get voterCount(): number {
+    if (!this.songsOrder.length) return 0;
+    return this.songsOrder[0].votes.filter(v => v[1] !== 0).length;
+  }
+
+  get rotateHeaders(): boolean {
+    return this.voterCount > 6;
+  }
+
+  get voterColWidth(): string {
+    return this.rotateHeaders ? '68px' : '9%';
+  }
+
+  get rankColWidth(): string {
+    return this.rotateHeaders ? '44px' : '4%';
+  }
+
+  get orderColWidth(): string {
+    return this.rotateHeaders ? '50px' : '6%';
+  }
+
+  placementOpaque(song: SongDB): string {
+    const color = this.placement(song);
+    const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+    if (!match) return color;
+    const r = +match[1], g = +match[2], b = +match[3], a = match[4] ? +match[4] : 1;
+    const bg = this.bgBase;
+    return `rgb(${Math.round((1 - a) * bg.r + a * r)}, ${Math.round((1 - a) * bg.g + a * g)}, ${Math.round((1 - a) * bg.b + a * b)})`;
+  }
 
   constructor(
     private votingService: VotingService,
@@ -96,13 +129,31 @@ export class ResultComponent implements OnInit, OnDestroy {
           }
           this.songs = this.shuffle(this.songs);
         }
+        this.updateStickyOffsets();
       }
     );
   }
 
   @ViewChildren(NgbdSortableHeader) headers!: QueryList<NgbdSortableHeader>;
+  @ViewChild('rankTh', { static: false }) private rankTh?: ElementRef<HTMLElement>;
+  @ViewChild('orderTh', { static: false }) private orderTh?: ElementRef<HTMLElement>;
+
+  stickyCountryLeft = '44px';
+  stickyResultRight = '50px';
+
+  private updateStickyOffsets(): void {
+    setTimeout(() => {
+      if (this.rankTh) {
+        this.stickyCountryLeft = this.rankTh.nativeElement.offsetWidth + 'px';
+      }
+      if (this.orderTh) {
+        this.stickyResultRight = this.orderTh.nativeElement.offsetWidth + 'px';
+      }
+    }, 0);
+  }
 
   onSort({column, direction}: SortEvent) {
+    this.currentSortColumn = direction === '' ? '' : column;
     this.headers.forEach(header => {
       if (header.sortable !== column) {
         header.direction = '';
@@ -365,6 +416,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.songsOrder = this.sortResults();
     }
     this.headers.forEach(h => h.direction = '');
+    this.currentSortColumn = '';
     this.shown = this.isFinal ? this.songs.length : 0;
   }
 
@@ -375,10 +427,12 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.songsOrder = this.songsOrder1.slice();
       this.songs = this.sortResults().slice(0, 10);
       this.headers.forEach(h => h.direction = '');
+      this.currentSortColumn = '';
     }
     this.table = !this.table;
     this.shown = 10;
     this.isStart = false;
+    this.updateStickyOffsets();
   }
 
   onJury() {
