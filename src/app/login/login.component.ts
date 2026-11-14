@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from './login.service';
+import { EventService } from '../shared/event.service';
 
 const NAME_PATTERN = /^[a-zA-ZčČćĆđĐšŠžŽ]+([- ][a-zA-ZčČćĆđĐšŠžŽ]+)*$/;
 
@@ -21,10 +22,15 @@ export class LoginComponent implements OnInit {
     ])
   });
 
+  isAsia = false;
+
   constructor(
     private router: Router,
-    private loginService: LoginService
-  ) {}
+    private loginService: LoginService,
+    private eventService: EventService
+  ) {
+    this.isAsia = this.eventService.getActive().event === 'Asia';
+  }
 
   ngOnInit(): void {
     this.loginService.clearUser();

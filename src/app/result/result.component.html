@@ -312,32 +312,10 @@
 </div>
 
 <!-- Lyrics panel, slides in from the right -->
-<div class="lyrics-overlay" *ngIf="lyricsPanelOpen" (click)="closeLyrics()"></div>
-<div class="lyrics-panel" [class.open]="lyricsPanelOpen">
-  <div class="lyrics-panel-header">
-    <button class="lyrics-back" type="button" (click)="closeLyrics()">&larr; Back</button>
-    <div class="lyrics-tabs" *ngIf="selectedLyrics as lyr">
-      <button
-        type="button"
-        class="lyrics-tab"
-        [class.active]="lyricsLang === 'native'"
-        (click)="lyricsLang = 'native'">
-        {{ lyr.native.language || 'Native' }}
-      </button>
-      <button
-        type="button"
-        class="lyrics-tab"
-        *ngIf="lyr.english"
-        [class.active]="lyricsLang === 'english'"
-        (click)="lyricsLang = 'english'">
-        English
-      </button>
-    </div>
-  </div>
-  <div class="lyrics-panel-body" *ngIf="selectedLyricsText as text">
-    <h3 class="lyrics-title">{{ text.title }}</h3>
-    <div class="lyrics-verse" *ngFor="let verse of text.verses">
-      <p *ngFor="let line of verse">{{ line }}</p>
-    </div>
-  </div>
-</div>
+<app-lyrics-panel
+  [open]="lyricsPanelOpen"
+  [entry]="selectedLyrics"
+  [countryName]="lyricsCountry"
+  [countryFlag]="lyricsFlag"
+  (closed)="closeLyrics()">
+</app-lyrics-panel>

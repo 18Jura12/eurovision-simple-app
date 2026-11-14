@@ -62,7 +62,6 @@ export class ResultComponent implements OnInit, OnDestroy {
   lyrics: {[country: string]: LyricsEntry} = {};
   lyricsPanelOpen = false;
   lyricsCountry = '';
-  lyricsLang: 'native' | 'english' = 'native';
 
   // Mobile: floating control-button panel, opened by swiping in from the
   // right screen edge, closed by swiping back out or pressing any button.
@@ -160,8 +159,6 @@ export class ResultComponent implements OnInit, OnDestroy {
   openLyrics(countryName: string): void {
     if (!this.lyrics[countryName]) return;
     this.lyricsCountry = countryName;
-    const entry = this.lyrics[countryName];
-    this.lyricsLang = entry.native ? 'native' : 'english';
     this.lyricsPanelOpen = true;
   }
 
@@ -173,10 +170,11 @@ export class ResultComponent implements OnInit, OnDestroy {
     return this.lyrics[this.lyricsCountry] ?? null;
   }
 
-  get selectedLyricsText() {
-    const entry = this.selectedLyrics;
-    if (!entry) return null;
-    return this.lyricsLang === 'native' ? entry.native : (entry.english ?? entry.native);
+  get lyricsFlag(): string {
+    // songsOrder1 holds the full, untruncated list (SF mode trims `songs`
+    // down to the shown top 10, which could exclude the country whose
+    // lyrics are open).
+    return this.songsOrder1.find(s => s.countryName === this.lyricsCountry)?.countryFlag ?? '';
   }
 
   private songMeta: {[country: string]: {artist: string, song: string}} | null = null;

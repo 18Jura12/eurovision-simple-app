@@ -1,0 +1,123 @@
+// Vienna 2026 Electric palette
+@bg-panel:   rgba(12, 4, 50, 0.95);
+@pink:       #E6007E;
+@blue:       #0099FF;
+@text:       #F0EAFA;
+
+.lyrics-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1099;
+}
+
+.lyrics-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100dvh;
+  width: min(440px, 100vw);
+  background: @bg-panel;
+  border-left: 2px solid @blue;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 1100;
+
+  &.open {
+    transform: translateX(0);
+  }
+}
+
+.lyrics-panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(0, 153, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.lyrics-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.lyrics-country-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: @text;
+  font-weight: bold;
+  font-size: 1.05rem;
+}
+
+.lyrics-country-flag {
+  font-size: 1.2rem;
+}
+
+.lyrics-back {
+  background: transparent;
+  border: 2px solid @blue;
+  color: @text;
+  font-weight: bold;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: @blue;
+    color: #fff;
+  }
+}
+
+.lyrics-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.lyrics-tab {
+  background: transparent;
+  border: 1px solid rgba(0, 153, 255, 0.4);
+  color: @text;
+  opacity: 0.6;
+  padding: 0.3rem 0.9rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+
+  &.active {
+    opacity: 1;
+    border-color: @pink;
+    color: @pink;
+  }
+}
+
+.lyrics-panel-body {
+  padding: 1.25rem;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.lyrics-title {
+  color: @pink;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1.25rem;
+}
+
+.lyrics-verse {
+  margin-bottom: 1.25rem;
+
+  p {
+    margin: 0;
+    line-height: 1.6;
+    color: @text;
+  }
+}

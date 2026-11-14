@@ -1,0 +1,35 @@
+<div class="lyrics-overlay" *ngIf="open" (click)="close()"></div>
+<div class="lyrics-panel" [class.open]="open">
+  <div class="lyrics-panel-header">
+    <div class="lyrics-header-top">
+      <button class="lyrics-back" type="button" (click)="close()">&larr; Back</button>
+      <div class="lyrics-country-title" *ngIf="countryName">
+        <span [ngClass]="'flag-icon flag-icon-' + countryFlag + ' lyrics-country-flag'"></span>
+        <span>{{ countryName }}</span>
+      </div>
+    </div>
+    <div class="lyrics-tabs" *ngIf="entry as e">
+      <button
+        type="button"
+        class="lyrics-tab"
+        [class.active]="lang === 'native'"
+        (click)="lang = 'native'">
+        {{ e.native.language || 'Native' }}
+      </button>
+      <button
+        type="button"
+        class="lyrics-tab"
+        *ngIf="e.english"
+        [class.active]="lang === 'english'"
+        (click)="lang = 'english'">
+        English
+      </button>
+    </div>
+  </div>
+  <div class="lyrics-panel-body" *ngIf="text as t">
+    <h3 class="lyrics-title">{{ t.title }}</h3>
+    <div class="lyrics-verse" *ngFor="let verse of t.verses">
+      <p *ngFor="let line of verse">{{ line }}</p>
+    </div>
+  </div>
+</div>

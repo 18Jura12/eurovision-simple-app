@@ -1,7 +1,14 @@
 <div class="login-page">
   <div class="login-card">
     <a routerLink="/result" class="logo-link">
-      <img src="../../assets/esc2026logo.png" class="logo-img" alt="Eurovision 2026">
+      <img
+        *ngIf="isAsia; else defaultLogo"
+        src="../../assets/eurovisionasia2026logo.jpg"
+        class="logo-img"
+        alt="Eurovision Asia 2026">
+      <ng-template #defaultLogo>
+        <img src="../../assets/esc2026logo.png" class="logo-img" alt="Eurovision 2026">
+      </ng-template>
     </a>
 
     <form [formGroup]="nameForm" (ngSubmit)="setLogin()" class="mt-3">

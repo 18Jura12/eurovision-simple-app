@@ -39,7 +39,6 @@ export class VotingComponent implements OnInit {
   lyrics: {[country: string]: LyricsEntry} = {};
   lyricsPanelOpen = false;
   lyricsCountry = '';
-  lyricsLang: 'native' | 'english' = 'native';
 
   constructor(
     private router: Router,
@@ -204,8 +203,6 @@ export class VotingComponent implements OnInit {
   openLyrics(countryName: string): void {
     if (!this.lyrics[countryName]) return;
     this.lyricsCountry = countryName;
-    const entry = this.lyrics[countryName];
-    this.lyricsLang = entry.native ? 'native' : 'english';
     this.lyricsPanelOpen = true;
   }
 
@@ -217,10 +214,8 @@ export class VotingComponent implements OnInit {
     return this.lyrics[this.lyricsCountry] ?? null;
   }
 
-  get selectedLyricsText() {
-    const entry = this.selectedLyrics;
-    if (!entry) return null;
-    return this.lyricsLang === 'native' ? entry.native : (entry.english ?? entry.native);
+  get lyricsFlag(): string {
+    return this.songs.find(s => s.countryName === this.lyricsCountry)?.countryFlag ?? '';
   }
 
   setClass(i: number): string {

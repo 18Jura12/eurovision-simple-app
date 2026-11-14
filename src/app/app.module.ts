@@ -12,6 +12,7 @@ import { VotingComponent } from './voting/voting.component';
 import { NgbdSortableHeader, ResultComponent } from './result/result.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { LyricsPanelComponent } from './shared/lyrics-panel/lyrics-panel.component';
 import { AppComponent } from './app.component';
 import { AdminComponent } from './admin/admin.component';
 
@@ -23,6 +24,7 @@ import { AdminComponent } from './admin/admin.component';
     ResultComponent,
     NgbdSortableHeader,
     LoadingSpinnerComponent,
+    LyricsPanelComponent,
     AdminComponent
   ],
   imports: [
