@@ -1,10 +1,11 @@
-import { Component, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DataStorageService } from '../shared/data-storage.service';
 import { SongDB, VotingService } from '../voting/voting.service';
 import * as _ from 'lodash-es';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import { EventService } from '../shared/event.service';
+import { LyricsEntry } from '../shared/lyrics';
 
 export type SortColumn = string;
 export type SortDirection = 'asc' | 'desc' | '';
@@ -54,6 +55,21 @@ export class ResultComponent implements OnInit, OnDestroy {
   isFinal: boolean;
   currentSortColumn: SortColumn = '';
 
+  // Mobile: columns are always fixed/scrollable regardless of voter count,
+  // since the device width itself is the constraint, not just column count.
+  isNarrow = false;
+
+  lyrics: {[country: string]: LyricsEntry} = {};
+  lyricsPanelOpen = false;
+  lyricsCountry = '';
+  lyricsLang: 'native' | 'english' = 'native';
+
+  // Mobile: floating control-button panel, opened by swiping in from the
+  // right screen edge, closed by swiping back out or pressing any button.
+  controlPanelOpen = false;
+  private touchStartX = 0;
+  private touchStartY = 0;
+
   private readonly bgBase = { r: 10, g: 4, b: 53 };
 
   get voterCount(): number {
@@ -62,7 +78,7 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   get rotateHeaders(): boolean {
-    return this.voterCount > 6;
+    return this.voterCount > 6 || this.isNarrow;
   }
 
   get voterColWidth(): string {
@@ -70,7 +86,11 @@ export class ResultComponent implements OnInit, OnDestroy {
   }
 
   get rankColWidth(): string {
-    return this.rotateHeaders ? '44px' : '4%';
+    // Just wide enough for a 2-digit number. Needs to stay in the same unit
+    // as its sibling columns: with table-layout:fixed (desktop), mixing a
+    // fixed em width in with percentage columns makes the browser dump all
+    // unaccounted width into the em column instead of sharing it out.
+    return this.rotateHeaders ? '2.2em' : '3%';
   }
 
   get orderColWidth(): string {
@@ -93,11 +113,92 @@ export class ResultComponent implements OnInit, OnDestroy {
     private eventService: EventService
   ) {
     const event = this.eventService.getActive().event;
-    this.isFinal = event === 'Final' || event === 'AllSongs';
+    this.isFinal = event === 'Final' || event === 'AllSongs' || event === 'Asia';
+    this.isNarrow = window.innerWidth < 768;
+  }
+
+  @HostListener('window:resize')
+  @HostListener('window:orientationchange')
+  onWindowResize(): void {
+    this.isNarrow = window.innerWidth < 768;
+    this.updateStickyOffsets();
+  }
+
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(e: TouchEvent): void {
+    const t = e.touches[0];
+    this.touchStartX = t.clientX;
+    this.touchStartY = t.clientY;
+  }
+
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(e: TouchEvent): void {
+    const t = e.changedTouches[0];
+    const dx = t.clientX - this.touchStartX;
+    const dy = t.clientY - this.touchStartY;
+    if (Math.abs(dy) > Math.abs(dx)) return;
+
+    const edgeZone = 32;
+    if (!this.controlPanelOpen && this.touchStartX > window.innerWidth - edgeZone && dx < -40) {
+      this.controlPanelOpen = true;
+    } else if (this.controlPanelOpen && dx > 40) {
+      this.controlPanelOpen = false;
+    }
+  }
+
+  closeControlPanel(): void {
+    this.controlPanelOpen = false;
+  }
+
+  hasLyrics(countryName: string): boolean {
+    return !!this.lyrics[countryName];
+  }
+
+  openLyrics(countryName: string): void {
+    if (!this.lyrics[countryName]) return;
+    this.lyricsCountry = countryName;
+    const entry = this.lyrics[countryName];
+    this.lyricsLang = entry.native ? 'native' : 'english';
+    this.lyricsPanelOpen = true;
+  }
+
+  closeLyrics(): void {
+    this.lyricsPanelOpen = false;
+  }
+
+  get selectedLyrics(): LyricsEntry | null {
+    return this.lyrics[this.lyricsCountry] ?? null;
+  }
+
+  get selectedLyricsText() {
+    const entry = this.selectedLyrics;
+    if (!entry) return null;
+    return this.lyricsLang === 'native' ? entry.native : (entry.english ?? entry.native);
+  }
+
+  private songMeta: {[country: string]: {artist: string, song: string}} | null = null;
+
+  private applySongMeta(): void {
+    if (!this.songMeta) return;
+    for (const s of this.songs) {
+      const m = this.songMeta[s.countryName];
+      if (m) {
+        s.artist = m.artist;
+        s.song = m.song;
+      }
+    }
   }
 
   ngOnInit(): void {
     this.isLoading = true;
+    const { year } = this.eventService.getActive();
+    this.dataStorageService.fetchLyrics(year).subscribe(lyrics => {
+      if (lyrics) this.lyrics = lyrics;
+    });
+    this.dataStorageService.fetchSongMeta(year).subscribe(meta => {
+      this.songMeta = meta;
+      this.applySongMeta();
+    });
     this.dataStorageService.fetchAllVotes().subscribe(
       allVotes => {
         this.isLoading = false;
@@ -110,6 +211,7 @@ export class ResultComponent implements OnInit, OnDestroy {
           }
           this.songs.push(new SongDB(song.countryFlag, song.countryName, points));
         }
+        this.applySongMeta();
         this.votingService.setSongs(this.songs);
         this.songsOrder = this.songs.slice();
         this.songsOrder1 = this.songs.slice();
@@ -142,14 +244,20 @@ export class ResultComponent implements OnInit, OnDestroy {
   stickyResultRight = '50px';
 
   private updateStickyOffsets(): void {
-    setTimeout(() => {
-      if (this.rankTh) {
-        this.stickyCountryLeft = this.rankTh.nativeElement.offsetWidth + 'px';
-      }
-      if (this.orderTh) {
-        this.stickyResultRight = this.orderTh.nativeElement.offsetWidth + 'px';
-      }
-    }, 0);
+    // Two rAFs: the first runs after the browser has applied whatever CSS
+    // change (media query, class toggle) triggered this call, the second
+    // after it's actually painted — a single setTimeout(0) could still race
+    // ahead of that and measure the pre-change width during a fast resize.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (this.rankTh) {
+          this.stickyCountryLeft = this.rankTh.nativeElement.offsetWidth + 'px';
+        }
+        if (this.orderTh) {
+          this.stickyResultRight = this.orderTh.nativeElement.offsetWidth + 'px';
+        }
+      });
+    });
   }
 
   onSort({column, direction}: SortEvent) {

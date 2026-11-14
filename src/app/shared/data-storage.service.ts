@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EventService } from './event.service';
+import { LyricsEntry } from './lyrics';
 
 const DB = 'https://sm-euro-default-rtdb.europe-west1.firebasedatabase.app';
 
@@ -29,6 +30,14 @@ export class DataStorageService {
 
   fetchCatalog(): Observable<{[year: string]: {[event: string]: {countries: string[]}}} | null> {
     return this.http.get<any>(`${DB}/catalog.json`);
+  }
+
+  fetchSongMeta(year: number): Observable<{[country: string]: {artist: string, song: string}} | null> {
+    return this.http.get<any>(`${DB}/songs/${year}.json`);
+  }
+
+  fetchLyrics(year: number): Observable<{[country: string]: LyricsEntry} | null> {
+    return this.http.get<any>(`${DB}/lyrics/${year}.json`);
   }
 
   fetchAdminPasswordHash(): Observable<string | null> {

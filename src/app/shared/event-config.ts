@@ -1,4 +1,4 @@
-export type EventType = 'SF1' | 'SF2' | 'Final' | 'AllSongs';
+export type EventType = 'SF1' | 'SF2' | 'Final' | 'Asia' | 'AllSongs';
 
 export interface EventConfig {
   year: number;

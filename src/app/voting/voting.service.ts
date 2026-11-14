@@ -6,7 +6,9 @@ export class SongDB {
   constructor(
     public countryFlag: string,
     public countryName: string,
-    public points?: {[key: string]: number}
+    public points?: {[key: string]: number},
+    public artist?: string,
+    public song?: string
   ) {
     if(points === undefined) {
       this.points = {};
@@ -97,6 +99,18 @@ export class VotingService {
     ['Ukraine', new SongDB('ua', 'Ukraine')],
     ['United Kingdom', new SongDB('gb', 'United Kingdom')],
     ['Yugoslavia', new SongDB('yu', 'Yugoslavia')],
+    // Eurovision Asia
+    ['Bangladesh', new SongDB('bd', 'Bangladesh')],
+    ['Bhutan', new SongDB('bt', 'Bhutan')],
+    ['Cambodia', new SongDB('kh', 'Cambodia')],
+    ['Laos', new SongDB('la', 'Laos')],
+    ['Malaysia', new SongDB('my', 'Malaysia')],
+    ['Mongolia', new SongDB('mn', 'Mongolia')],
+    ['Nepal', new SongDB('np', 'Nepal')],
+    ['Philippines', new SongDB('ph', 'Philippines')],
+    ['South Korea', new SongDB('kr', 'South Korea')],
+    ['Thailand', new SongDB('th', 'Thailand')],
+    ['Vietnam', new SongDB('vn', 'Vietnam')],
   ]);
 
   songsArray: SongDB[];

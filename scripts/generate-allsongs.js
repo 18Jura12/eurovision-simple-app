@@ -69,7 +69,7 @@ async function main() {
 
     const all = new Set();
     for (const [eventName, eventData] of Object.entries(events)) {
-      if (eventName === 'AllSongs') continue;
+      if (eventName === 'AllSongs' || eventName === 'Asia') continue;
       for (const country of eventData.countries || []) {
         all.add(country);
       }

@@ -9,11 +9,14 @@ import * as _ from 'lodash-es';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from '../login/login.service';
 import { EventService } from '../shared/event.service';
+import { LyricsEntry } from '../shared/lyrics';
 
 export class Song {
   constructor(
     public countryFlag: string,
-    public countryName: string
+    public countryName: string,
+    public artist?: string,
+    public song?: string
   ) {}
 }
 
@@ -33,6 +36,11 @@ export class VotingComponent implements OnInit {
 
   songs: SongDB[];
 
+  lyrics: {[country: string]: LyricsEntry} = {};
+  lyricsPanelOpen = false;
+  lyricsCountry = '';
+  lyricsLang: 'native' | 'english' = 'native';
+
   constructor(
     private router: Router,
     private toastrService: ToastrService,
@@ -43,7 +51,7 @@ export class VotingComponent implements OnInit {
   ) {
     this.songs = votingService.getSongs();
     const event = eventService.getActive().event;
-    this.isFinal = event === 'Final' || event === 'AllSongs';
+    this.isFinal = event === 'Final' || event === 'AllSongs' || event === 'Asia';
   }
 
   private get draftKey(): string {
@@ -72,6 +80,20 @@ export class VotingComponent implements OnInit {
   ngOnInit(): void {
     this.login = this.loginService.getUser()!;
     this.isLoading = true;
+    const { year } = this.eventService.getActive();
+    this.dataStorageService.fetchSongMeta(year).subscribe(meta => {
+      if (!meta) return;
+      for (const s of this.songs) {
+        const m = meta[s.countryName];
+        if (m) {
+          s.artist = m.artist;
+          s.song = m.song;
+        }
+      }
+    });
+    this.dataStorageService.fetchLyrics(year).subscribe(lyrics => {
+      if (lyrics) this.lyrics = lyrics;
+    });
     this.dataStorageService.fetchUserVotes(this.login).subscribe(
       (existingVotes) => {
         if (existingVotes !== null) {
@@ -153,6 +175,10 @@ export class VotingComponent implements OnInit {
     this.router.navigate(['/result']);
   }
 
+  onBack() {
+    this.router.navigate(['/login']);
+  }
+
   get songControls() {
     return (this.voteForm.get('votes') as UntypedFormArray).controls;
   }
@@ -160,13 +186,41 @@ export class VotingComponent implements OnInit {
   getSongDetails(i: number): Song {
     return new Song(
       this.songs[i].countryFlag,
-      this.songs[i].countryName
+      this.songs[i].countryName,
+      this.songs[i].artist,
+      this.songs[i].song
     );
   }
 
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.songs, event.previousIndex, event.currentIndex);
     this.saveDraft();
+  }
+
+  hasLyrics(countryName: string): boolean {
+    return !!this.lyrics[countryName];
+  }
+
+  openLyrics(countryName: string): void {
+    if (!this.lyrics[countryName]) return;
+    this.lyricsCountry = countryName;
+    const entry = this.lyrics[countryName];
+    this.lyricsLang = entry.native ? 'native' : 'english';
+    this.lyricsPanelOpen = true;
+  }
+
+  closeLyrics(): void {
+    this.lyricsPanelOpen = false;
+  }
+
+  get selectedLyrics(): LyricsEntry | null {
+    return this.lyrics[this.lyricsCountry] ?? null;
+  }
+
+  get selectedLyricsText() {
+    const entry = this.selectedLyrics;
+    if (!entry) return null;
+    return this.lyricsLang === 'native' ? entry.native : (entry.english ?? entry.native);
   }
 
   setClass(i: number): string {

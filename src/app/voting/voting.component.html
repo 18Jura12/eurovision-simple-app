@@ -22,7 +22,17 @@
             class="rank-badge"
             readonly>
           <span [ngClass]="'flag-icon flag-icon-' + getSongDetails(i).countryFlag + ' flag'"></span>
-          <span [ngClass]="setClass(i) + ' country-name'">{{ getSongDetails(i).countryName }}</span>
+          <div class="country-info">
+            <span [ngClass]="setClass(i) + ' country-name'">{{ getSongDetails(i).countryName }}</span>
+            <span class="song-info" *ngIf="getSongDetails(i).artist || getSongDetails(i).song">{{ getSongDetails(i).artist }} &ndash; &quot;{{ getSongDetails(i).song }}&quot;</span>
+          </div>
+          <span
+            class="lyrics-trigger"
+            *ngIf="hasLyrics(getSongDetails(i).countryName)"
+            title="Lyrics"
+            (click)="$event.stopPropagation(); openLyrics(getSongDetails(i).countryName)">
+            <i class="bi bi-file-text"></i>
+          </span>
           <span class="drag-handle">&#8942;</span>
         </div>
         <div class="qualline" *ngIf="i === 9 && !isFinal"></div>
@@ -36,7 +46,40 @@
       <button *ngIf="hasVoted" class="btn btn-cancel" type="button" (click)="onCancel()">
         Cancel
       </button>
+      <button *ngIf="!hasVoted" class="btn btn-cancel" type="button" (click)="onBack()">
+        Back
+      </button>
       <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
     </div>
   </form>
+</div>
+
+<div class="lyrics-overlay" *ngIf="lyricsPanelOpen" (click)="closeLyrics()"></div>
+<div class="lyrics-panel" [class.open]="lyricsPanelOpen">
+  <div class="lyrics-panel-header">
+    <button class="lyrics-back" type="button" (click)="closeLyrics()">&larr; Back</button>
+    <div class="lyrics-tabs" *ngIf="selectedLyrics as lyr">
+      <button
+        type="button"
+        class="lyrics-tab"
+        [class.active]="lyricsLang === 'native'"
+        (click)="lyricsLang = 'native'">
+        {{ lyr.native.language || 'Native' }}
+      </button>
+      <button
+        type="button"
+        class="lyrics-tab"
+        *ngIf="lyr.english"
+        [class.active]="lyricsLang === 'english'"
+        (click)="lyricsLang = 'english'">
+        English
+      </button>
+    </div>
+  </div>
+  <div class="lyrics-panel-body" *ngIf="selectedLyricsText as text">
+    <h3 class="lyrics-title">{{ text.title }}</h3>
+    <div class="lyrics-verse" *ngFor="let verse of text.verses">
+      <p *ngFor="let line of verse">{{ line }}</p>
+    </div>
+  </div>
 </div>

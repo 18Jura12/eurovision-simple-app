@@ -10,7 +10,7 @@
         data-mobile-responsive="true">
         <thead class="header">
           <tr>
-            <th #rankTh [style.width]="rankColWidth" [class.sticky-rank]="rotateHeaders" scope="col">#</th>
+            <th #rankTh [style.width]="rankColWidth" class="rank-col" [class.sticky-rank]="rotateHeaders" scope="col">#</th>
             <th style="width: 25%;" [class.sticky-country]="rotateHeaders" [style.left]="rotateHeaders ? stickyCountryLeft : null" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
             <ng-container *ngFor="let person of songsOrder[0].votes">
               <th *ngIf="person[1] !== 0" [style.width]="voterColWidth" class="voter-col text-center" [class.sorted-voter]="currentSortColumn === person[0]" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
@@ -22,12 +22,24 @@
         <tbody class="over">
           <ng-container *ngFor="let song of songsOrder; let i = index">
             <tr *ngIf="shown <= i">
-              <td [class.sticky-rank]="rotateHeaders" [style.background-color]="placementOpaque(song)" class="{{setColour(song)}} align-middle font-weight-bold">
+              <td [class.sticky-rank]="rotateHeaders" [style.background-color]="placementOpaque(song)" class="{{setColour(song)}} rank-col align-middle font-weight-bold">
                 {{ sortResults().indexOf(song) + 1 }}
               </td>
               <td [class.sticky-country]="rotateHeaders" [style.left]="rotateHeaders ? stickyCountryLeft : null" [style.background-color]="placementOpaque(song)" class="country-col align-middle">
-                <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
-                <span class="{{setColour(song)}} h5"> {{ song.countryName }}</span>
+                <div class="country-row">
+                  <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+                  <div class="country-info">
+                    <span class="{{setColour(song)}} h5 country-name-label"> {{ song.countryName }}</span>
+                    <span class="{{setColour(song)}} song-info" *ngIf="song.artist || song.song">{{ song.artist }} &ndash; &quot;{{ song.song }}&quot;</span>
+                  </div>
+                  <span
+                    class="lyrics-trigger"
+                    *ngIf="hasLyrics(song.countryName)"
+                    title="Lyrics"
+                    (click)="$event.stopPropagation(); openLyrics(song.countryName)">
+                    <i class="bi bi-file-text"></i>
+                  </span>
+                </div>
               </td>
               <ng-container *ngFor="let person of song.votes">
                 <td
@@ -116,7 +128,7 @@
         data-mobile-responsive="true">
         <thead class="header">
           <tr>
-            <th #rankTh [style.width]="rankColWidth" [class.sticky-rank]="rotateHeaders" scope="col">#</th>
+            <th #rankTh [style.width]="rankColWidth" class="rank-col" [class.sticky-rank]="rotateHeaders" scope="col">#</th>
             <th style="width: 25%;" [class.sticky-country]="rotateHeaders" [style.left]="rotateHeaders ? stickyCountryLeft : null" scope="col" sortable="name" (sort)="onSort($event)">Country</th>
             <ng-container *ngFor="let person of songsOrder[0].votes">
               <th *ngIf="person[1] !== 0" [style.width]="voterColWidth" class="voter-col text-center" [class.sorted-voter]="currentSortColumn === person[0]" scope="col" sortable="{{person[0]}}" (sort)="onSort($event)">{{ person[0] | titlecase }}</th>
@@ -130,14 +142,26 @@
             <tr>
               <td
                 [class.sticky-rank]="rotateHeaders" [style.background-color]="placementOpaque(song)"
-                class="{{setColour(song)}} align-middle font-weight-bold">
+                class="{{setColour(song)}} rank-col align-middle font-weight-bold">
                 {{ +i + 1 }}
               </td>
               <td
                 [class.sticky-country]="rotateHeaders" [style.left]="rotateHeaders ? stickyCountryLeft : null" [style.background-color]="placementOpaque(song)"
                 class="country-col align-middle">
-                <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
-                <span class="{{setColour(song)}} h5"> {{ song.countryName }}</span>
+                <div class="country-row">
+                  <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+                  <div class="country-info">
+                    <span class="{{setColour(song)}} h5 country-name-label"> {{ song.countryName }}</span>
+                    <span class="{{setColour(song)}} song-info" *ngIf="song.artist || song.song">{{ song.artist }} &ndash; &quot;{{ song.song }}&quot;</span>
+                  </div>
+                  <span
+                    class="lyrics-trigger"
+                    *ngIf="hasLyrics(song.countryName)"
+                    title="Lyrics"
+                    (click)="$event.stopPropagation(); openLyrics(song.countryName)">
+                    <i class="bi bi-file-text"></i>
+                  </span>
+                </div>
               </td>
               <ng-container *ngFor="let person of song.votes">
                 <td
@@ -189,7 +213,7 @@
         data-mobile-responsive="true">
         <thead class="header">
           <tr>
-            <th style="width: 4%;" scope="col">#</th>
+            <th [style.width]="rankColWidth" class="rank-col" scope="col">#</th>
             <th style="width: 25%;" scope="col">Country</th>
           </tr>
         </thead>
@@ -198,13 +222,25 @@
             <tr
               [ngStyle]="{'background-color': placement(song)}">
               <td
-                class="{{setColour(song)}} align-middle font-weight-bold">
+                class="{{setColour(song)}} rank-col align-middle font-weight-bold">
                 {{ +i + 1 }}
               </td>
               <td
                 class="align-middle">
-                <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
-                <span class="h5 {{setColour(song)}}"> {{ song.countryName }}</span>
+                <div class="country-row">
+                  <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+                  <div class="country-info">
+                    <span class="h5 {{setColour(song)}} country-name-label"> {{ song.countryName }}</span>
+                    <span class="{{setColour(song)}} song-info" *ngIf="song.artist || song.song">{{ song.artist }} &ndash; &quot;{{ song.song }}&quot;</span>
+                  </div>
+                  <span
+                    class="lyrics-trigger"
+                    *ngIf="hasLyrics(song.countryName)"
+                    title="Lyrics"
+                    (click)="$event.stopPropagation(); openLyrics(song.countryName)">
+                    <i class="bi bi-file-text"></i>
+                  </span>
+                </div>
               </td>
             </tr>
           </ng-container>
@@ -248,3 +284,60 @@
   </div>
 </div>
 </ng-container>
+
+<!-- Mobile: floating control panel, swiped in from the right edge -->
+<div class="control-panel" [class.open]="controlPanelOpen" (click)="closeControlPanel()">
+  <ng-container *ngIf="isFinal; else sfControls">
+    <button class="btn btn-success" (click)="onVote()">To Voting</button>
+    <button class="btn btn-info" (click)="onJury()">{{ mode === 'jury' ? 'Normal' : 'Exp' }}</button>
+    <button class="btn btn-info" (click)="onTelevote()">{{ mode === 'televote' ? 'Normal' : 'Points' }}</button>
+    <button class="btn btn-info" (click)="onStart()" [disabled]="shown === 0">
+      {{ isStart ? 'Stop' : shown === songs.length ? 'Start' : 'Continue' }}
+    </button>
+    <button class="btn btn-warning" (click)="shown = 0; isStart=false;" [disabled]="shown === 0">Skip</button>
+    <button class="btn btn-danger" (click)="onReset()" [disabled]="shown === songs.length">Reset</button>
+  </ng-container>
+  <ng-template #sfControls>
+    <button class="btn btn-success" (click)="onVote()">To Voting</button>
+    <button class="btn btn-info" (click)="onTable()">{{ table ? 'Go Back' : 'To Table' }}</button>
+    <button class="btn btn-info" (click)="onJury()" [disabled]="!table">{{ mode === 'jury' ? 'Normal' : 'Exp' }}</button>
+    <button class="btn btn-info" (click)="onTelevote()" [disabled]="!table">{{ mode === 'televote' ? 'Normal' : 'Points' }}</button>
+    <button class="btn btn-info" (click)="onStart()" [disabled]="shown === 10 || table">
+      {{ isStart ? 'Stop' : shown === 0 ? 'Start' : 'Continue' }}
+    </button>
+    <button class="btn btn-warning" (click)="shown = 10; isStart=false;" [disabled]="shown === 10 || table">Skip</button>
+    <button class="btn btn-danger" (click)="onReset()" [disabled]="shown === 0 || table">Reset</button>
+  </ng-template>
+  <div class="control-panel-hint">&#8249;</div>
+</div>
+
+<!-- Lyrics panel, slides in from the right -->
+<div class="lyrics-overlay" *ngIf="lyricsPanelOpen" (click)="closeLyrics()"></div>
+<div class="lyrics-panel" [class.open]="lyricsPanelOpen">
+  <div class="lyrics-panel-header">
+    <button class="lyrics-back" type="button" (click)="closeLyrics()">&larr; Back</button>
+    <div class="lyrics-tabs" *ngIf="selectedLyrics as lyr">
+      <button
+        type="button"
+        class="lyrics-tab"
+        [class.active]="lyricsLang === 'native'"
+        (click)="lyricsLang = 'native'">
+        {{ lyr.native.language || 'Native' }}
+      </button>
+      <button
+        type="button"
+        class="lyrics-tab"
+        *ngIf="lyr.english"
+        [class.active]="lyricsLang === 'english'"
+        (click)="lyricsLang = 'english'">
+        English
+      </button>
+    </div>
+  </div>
+  <div class="lyrics-panel-body" *ngIf="selectedLyricsText as text">
+    <h3 class="lyrics-title">{{ text.title }}</h3>
+    <div class="lyrics-verse" *ngFor="let verse of text.verses">
+      <p *ngFor="let line of verse">{{ line }}</p>
+    </div>
+  </div>
+</div>

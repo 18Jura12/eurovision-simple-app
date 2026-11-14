@@ -60,7 +60,7 @@ export class AdminComponent implements OnInit {
   }
 
   getEvents(year: string): string[] {
-    const order: {[k: string]: number} = { SF1: 0, SF2: 1, Final: 2 };
+    const order: {[k: string]: number} = { SF1: 0, SF2: 1, Final: 2, Asia: 3 };
     return Object.keys(this.catalog[year]).filter(e => e !== 'AllSongs').sort((a, b) => (order[a] ?? 9) - (order[b] ?? 9));
   }
 
@@ -71,7 +71,8 @@ export class AdminComponent implements OnInit {
   getAllSongsCountries(year: string): string[] {
     const events = this.catalog[year] || {};
     const all = new Set<string>();
-    for (const event of Object.values(events)) {
+    for (const [eventName, event] of Object.entries(events)) {
+      if (eventName === 'Asia') continue;
       for (const country of event.countries || []) {
         all.add(country);
       }
