@@ -138,7 +138,10 @@ export class ResultComponent implements OnInit, OnDestroy {
     const dy = t.clientY - this.touchStartY;
     if (Math.abs(dy) > Math.abs(dx)) return;
 
-    const edgeZone = 32;
+    // A literal screen-edge target is too thin to hit reliably on a real
+    // phone — anywhere in the rightmost fifth of the screen counts as the
+    // edge zone for opening the panel.
+    const edgeZone = window.innerWidth / 5;
     if (!this.controlPanelOpen && this.touchStartX > window.innerWidth - edgeZone && dx < -40) {
       this.controlPanelOpen = true;
     } else if (this.controlPanelOpen && dx > 40) {

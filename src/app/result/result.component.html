@@ -27,7 +27,7 @@
               </td>
               <td [class.sticky-country]="rotateHeaders" [style.left]="rotateHeaders ? stickyCountryLeft : null" [style.background-color]="placementOpaque(song)" class="country-col align-middle">
                 <div class="country-row">
-                  <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+                  <span [ngClass]="'flag h4 flag-icon flag-icon-'+ song.countryFlag"></span>
                   <div class="country-info">
                     <span class="{{setColour(song)}} h5 country-name-label"> {{ song.countryName }}</span>
                     <span class="{{setColour(song)}} song-info" *ngIf="song.artist || song.song">{{ song.artist }} &ndash; &quot;{{ song.song }}&quot;</span>
@@ -149,7 +149,7 @@
                 [class.sticky-country]="rotateHeaders" [style.left]="rotateHeaders ? stickyCountryLeft : null" [style.background-color]="placementOpaque(song)"
                 class="country-col align-middle">
                 <div class="country-row">
-                  <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+                  <span [ngClass]="'flag h4 flag-icon flag-icon-'+ song.countryFlag"></span>
                   <div class="country-info">
                     <span class="{{setColour(song)}} h5 country-name-label"> {{ song.countryName }}</span>
                     <span class="{{setColour(song)}} song-info" *ngIf="song.artist || song.song">{{ song.artist }} &ndash; &quot;{{ song.song }}&quot;</span>
@@ -228,7 +228,7 @@
               <td
                 class="align-middle">
                 <div class="country-row">
-                  <span [ngClass]="'flag mb-n1 h4 flag-icon flag-icon-'+ song.countryFlag"></span>
+                  <span [ngClass]="'flag h4 flag-icon flag-icon-'+ song.countryFlag"></span>
                   <div class="country-info">
                     <span class="h5 {{setColour(song)}} country-name-label"> {{ song.countryName }}</span>
                     <span class="{{setColour(song)}} song-info" *ngIf="song.artist || song.song">{{ song.artist }} &ndash; &quot;{{ song.song }}&quot;</span>

@@ -34,7 +34,7 @@ input[type="number"] {
     max-width: none;
     display: flex;
     flex-direction: column;
-    min-height: 100dvh;
+    height: 100dvh;
 
     form {
       display: flex;
@@ -65,7 +65,6 @@ input[type="number"] {
   padding: 0.5rem 0.6rem;
   min-height: 48px;
   cursor: grab;
-  touch-action: none;
 
   &:active {
     cursor: grabbing;
@@ -172,10 +171,11 @@ input[type="number"] {
 .drag-handle {
   color: rgba(0, 153, 255, 0.5);
   font-size: 1.4rem;
-  padding-left: 0.5rem;
+  padding: 0.4rem 0.3rem 0.4rem 0.6rem;
   cursor: grab;
   user-select: none;
   flex-shrink: 0;
+  touch-action: none;
 }
 
 .lyrics-trigger {

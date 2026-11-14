@@ -33,7 +33,7 @@
             (click)="$event.stopPropagation(); openLyrics(getSongDetails(i).countryName)">
             <i class="bi bi-file-text"></i>
           </span>
-          <span class="drag-handle">&#8942;</span>
+          <span class="drag-handle" cdkDragHandle>&#8942;</span>
         </div>
         <div class="qualline" *ngIf="i === 9 && !isFinal"></div>
       </div>
